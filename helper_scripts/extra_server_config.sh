@@ -5,8 +5,11 @@ echo "  Running Extra_Server_Config.sh"
 echo "#################################"
 sudo su
 
-useradd cumulus -m 
+useradd cumulus -m -s /bin/bash
 echo "cumulus:CumulusLinux!" | chpasswd
+
+# Hides "dpkg-reconfigure: unable to re-open stdin: No file or directory" error in Vagrant up
+export DEBIAN_FRONTEND=noninteractive
 
 #Test for Debian-Based Host
 which apt &> /dev/null
@@ -23,8 +26,8 @@ if [ "$?" == "0" ]; then
     echo -e  "source /etc/network/interfaces.d/*.cfg\n" >> /etc/network/interfaces
 
     #Add vagrant interface
-    echo -e "\n\nauto vagrant" > /etc/network/interfaces.d/vagrant.cfg
-    echo -e "iface vagrant inet dhcp\n\n" >> /etc/network/interfaces.d/vagrant.cfg
+    # echo -e "\n\nauto vagrant" > /etc/network/interfaces.d/vagrant.cfg
+    # echo -e "iface vagrant inet dhcp\n\n" >> /etc/network/interfaces.d/vagrant.cfg
 
     echo -e "\n\nauto eth0" > /etc/network/interfaces.d/eth0.cfg
     echo -e "iface eth0 inet dhcp\n\n" >> /etc/network/interfaces.d/eth0.cfg
@@ -41,12 +44,18 @@ if [ "$?" == "0" ]; then
     echo -e "DEVICE=eth0\nBOOTPROTO=dhcp\nONBOOT=yes" > /etc/sysconfig/network-scripts/ifcfg-eth0
 fi
 
+echo "### Installing SSH Keys"
+cat << DONE > /etc/init.d/install_ssh_key
+#!/bin/bash
+
 mkdir -p /home/cumulus/.ssh
 wget http://192.168.200.254/authorized_keys -q -O /home/cumulus/.ssh/authorized_keys
 chmod 700 -R /home/cumulus
 chown -R cumulus:cumulus /home/cumulus
 chmod 600 /home/cumulus/.ssh/*
 chmod 700 /home/cumulus/.ssh
+rm $0
+DONE
 
 echo "#################################"
 echo "   Finished"
