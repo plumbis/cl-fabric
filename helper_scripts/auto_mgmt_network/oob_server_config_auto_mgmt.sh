@@ -18,6 +18,9 @@ echo " Detected vagrant user is: $username"
 REPOSITORY="https://github.com/CumulusNetworks/"
 REPONAME=""
 
+# Hides "dpkg-reconfigure: unable to re-open stdin: No file or directory" error in Vagrant up
+export DEBIAN_FRONTEND=noninteractive
+
 #Install Automation Tools
 puppet=0
 ansible=1
@@ -99,7 +102,7 @@ apt-get update -y
 echo " ### Installing Packages... ###"
 # Do not install python-pip via apt. It breaks pip. See https://github.com/pypa/pip/issues/5221
 apt-get install -y htop isc-dhcp-server tree apache2 vlan git dnsmasq ifenslave apt-cacher-ng lldpd ntp
-wget https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+wget https://bootstrap.pypa.io/get-pip.py -q -O get-pip.py
 python get-pip.py
 rm get-pip.py
 modprobe 8021q
