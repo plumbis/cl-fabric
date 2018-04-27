@@ -1,0 +1,24 @@
+{%- if cli_args["provider"] == 'virtualbox' -%}
+#       -Virtualbox installed: https://www.virtualbox.org/wiki/Downloads
+{%- elif cli_args["provider"] == 'libvirt' -%}
+#        - Libvirt Installed -- guide to come
+#        - Vagrant-Libvirt Plugin installed: $ vagrant plugin install vagrant-libvirt
+#        - Start with "vagrant up --provider=libvirt --no-parallel"
+#
+#  Libvirt Start Port: {{ cli_args["start_port"] }}
+#  Libvirt Port Gap: {{ cli_args["port_gap"] }}
+
+# Set the default provider to libvirt in the case they forget
+# --provider=libvirt or if someone destroys a machine it reverts to virtualbox
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
+
+# Check required plugins
+REQUIRED_PLUGINS_LIBVIRT = %w(vagrant-libvirt)
+exit unless REQUIRED_PLUGINS_LIBVIRT.all? do |plugin|
+  Vagrant.has_plugin?(plugin) || (
+    puts "The #{plugin} plugin is required. Please install it with:"
+    puts "$ vagrant plugin install #{plugin}"
+    false
+  )
+end
+{%- endif -%}

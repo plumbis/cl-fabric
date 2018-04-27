@@ -1,0 +1,4 @@
+{# Provisioner for when a configuration file is provided #}
+    # Run the Config specified in the Node Attributes
+    device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
+    device.vm.provision :shell , path: "{{ node["config"] }}"

@@ -1,0 +1,9 @@
+{# defines libvirt specific customizations for a host. #}
+{%- if node["pxehost"] -%}
+        v.storage :file, :size => '100G', :type => 'qcow2', :bus => 'sata', :device => 'sda'
+        v.boot 'hd'
+        v.boot 'network'
+{%- endif -%}
+{%- if node["function"] == 'host' %}
+        v.nic_model_type = 'e1000'
+{%- endif -%}

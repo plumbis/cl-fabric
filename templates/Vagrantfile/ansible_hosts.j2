@@ -1,0 +1,9 @@
+  #Generating Ansible Host File at following location:
+  #    ./.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "./helper_scripts/empty_playbook.yml"
+
+    {% include "./ansible_groups.j2" %}
+
+  end
+

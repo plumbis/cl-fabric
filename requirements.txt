@@ -1,0 +1,4 @@
+setuptools==39.0.1
+pydotplus==2.0.2
+jinja2==2.10
+ipaddress==1.0.22

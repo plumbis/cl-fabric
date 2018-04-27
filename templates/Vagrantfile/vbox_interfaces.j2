@@ -1,0 +1,2 @@
+
+    device.vm.network "private_network", virtualbox__intnet: "#{simid}_{{ interface["network"] }}", auto_config: false , :mac => "{{ interface["mac"]|replace('0x', '') }}"

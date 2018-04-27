@@ -1,0 +1,16 @@
+
+    # ANSIBLE GROUPS CONFIGURATION
+    ansible.groups = {
+{%- for function, nodes in nodes.items() %}
+      "{{ function|get_plural }}s" => [
+          {%- for node in nodes -%}
+          "{{ node["hostname"] }}",
+          {%- endfor -%} ],
+{%- endfor %}
+      "network:children" => [
+          {%- for function, hostnames in nodes.items() -%}
+            {%- if function in known_functions -%}
+              "{{ function|get_plural }}s",
+            {%- endif -%}
+          {%- endfor -%}]
+    }

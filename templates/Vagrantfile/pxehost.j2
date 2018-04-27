@@ -1,0 +1,6 @@
+device.ssh.insert_key = false
+{% if cli_args["provider"] == 'libvirt' %}
+    # NO BOX USED FOR PXE DEVICE WITH LIBVIRT
+{%- else %}
+    device.vm.box = "{{ node["vm_os" ] }}"
+{% endif %}

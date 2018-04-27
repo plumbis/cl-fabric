@@ -1,0 +1,14 @@
+Vagrant.configure("2") do |config|
+{% if cli_args["provider"] == 'virtualbox' %}
+  simid = {{ epoch_time }}
+
+  config.vm.provider "virtualbox" do |v|
+    v.gui = false
+{%- elif cli_args["provider"] == 'libvirt' %}
+  config.vm.provider :libvirt do |domain|
+    # increase nic adapter count to be greater than 8 for all VMs.
+    domain.nic_adapter_count = 130
+{%- endif %}
+  end
+
+

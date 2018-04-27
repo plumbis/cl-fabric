@@ -1,0 +1,5 @@
+{# Additional provisioning for the oob-mgmt-switch #}
+ 
+    # Transfer Bridge File
+    device.vm.provision "file", source: "./helper_scripts/auto_mgmt_network/bridge-untagged", destination: "~/bridge-untagged"
+    device.vm.provision :shell , path: "./helper_scripts/oob_switch_config.sh"

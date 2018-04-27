@@ -1,0 +1,7 @@
+{# The provisioner and script responsible for deleted the udev directory #}
+    device.vm.provision :shell , :inline => <<-delete_udev_directory
+      if [ -d "/etc/udev/rules.d/70-persistent-net.rules" ]; then
+        rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
+      fi
+      rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
+    delete_udev_directory

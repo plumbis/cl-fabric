@@ -1,0 +1,26 @@
+# /etc/dhcp/dhcpd.hosts
+# Created by Topology-Converter v{{ version }}
+#    Template Revision: v5.0.0
+#    https://github.com/cumulusnetworks/topology_converter
+#    using topology data from: {{ topology }}
+
+group {
+  option domain-name-servers {{ oob_server_ip }};
+  option domain-name "simulation";
+  #option routers {{ oob_server_ip }};
+  option www-server {{ oob_server_ip }};
+  option default-url = "http://{{ oob_server_ip }}/onie-installer";
+
+{% for hostname, attributes in node_dict.items() %}
+  host {{ hostname }} {
+      hardware ethernet {{ attributes["mac"]}};
+      fixed-address {{ attributes["ip"] }};
+      option host-name "{{ hostname }}";
+      {%- if attributes["ztp"] is defined %}
+      option cumulus-provision-url "http://{{ oob_server_ip }}/{{ attributes["ztp"] }}";
+      {%- endif %}
+  }
+{% endfor -%}
+}
+#End of static host group
+

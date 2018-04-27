@@ -1,0 +1,4 @@
+{# Provisioner steps to take for devices running Cumulus Linux #}
+    # Copy over Topology.dot File
+    device.vm.provision "file", source: "{{ topology }}", destination: "~/topology.dot"
+    device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"

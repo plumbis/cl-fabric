@@ -1,0 +1,6 @@
+# Ansible Playbook Configuration
+    device.vm.provision "ansible" do |ansible|
+      ansible.playbook = "{{ node["other_attributes"]["playbook"] }}"
+      {% include "./ansible_groups.j2" %}
+    end
+

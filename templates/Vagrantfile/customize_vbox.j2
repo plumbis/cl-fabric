@@ -1,0 +1,26 @@
+{# defines vbox specific customizations for a host. #}
+        v.name = "#{simid}_{{ node["hostname"] }}"
+        v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
+
+{%- for i in range(2, 2 + node["interfaces"].__len__()) %}
+        v.customize ["modifyvm", :id, '--nicpromisc{{ i }}', 'allow-all']
+{%- endfor %}
+        v.customize ["modifyvm", :id, '--nictype1', 'virtio']
+
+{%- if node["pxehost"] %}
+
+    ### Setup Interfaces for PXEBOOT
+      # Adding network as a boot option.
+      vbox.customize ["modifyvm", :id, "--boot4", "net"]
+
+      # Setting Vagrant interface to lowest boot preference
+      vbox.customize ["modifyvm", :id, "--nicbootprio1", "0"]
+
+    {%- for interface in node["interfaces"].values() %}
+        {%- if interface["pxe_priority"] > 0 %}
+
+      # Setting Specified interface to highest preference.
+      vbox.customize ["modifyvm", :id, "--nicbootprio{{loop.index + 1}}", "1"]
+        {%- endif %}
+    {%- endfor %}
+{%- endif %}

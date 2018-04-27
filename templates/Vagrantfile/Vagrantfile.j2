@@ -1,0 +1,29 @@
+# Created by Topology-Converter v{{ version }}
+#    Template Revision: v5.0.0
+#    https://github.com/cumulusnetworks/topology_converter
+#    using topology data from: {{ topology }}
+#    built with the following args: {{ arguments }}
+#    NOTE: in order to use this Vagrantfile you will need:
+#        - Vagrant(v2.0.2+) installed: http://www.vagrantup.com/downloads
+#        - the "helper_scripts" directory that comes packaged with topology-converter.py
+{% include "./header.j2" %}
+
+Vagrant.require_version ">= 2.0.2"
+
+{% include "./script.j2" %}
+
+{% include "./provider_config.j2" -%}
+
+{%- if cli_args["ansible_hostfile"] == True %}
+    {%- include "./ansible_hosts.j2" %}
+{%- endif %}
+
+{%- for nodes in nodes.values() %}
+    {%- for node in nodes %}
+    {%- if node["hostname"] != "NOTHING" %}
+        {% include "./vm_definition.j2" %}
+    {%- endif %}
+    {%- endfor %}
+{%- endfor %}
+end
+ 

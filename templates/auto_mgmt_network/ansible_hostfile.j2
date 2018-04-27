@@ -1,0 +1,10 @@
+# Created by Topology-Converter v{{ version }}
+#    Template Revision: v5.0.0
+#    https://github.com/cumulusnetworks/topology_converter
+#    using topology data from: {{ topology }}
+{% for function, nodes in node_dict.items() %}
+[{{function}}s]
+{%- for node in nodes %}
+{{node.hostname}}{% if node.mgmt_ip is not none %} ansible_host={{node.mgmt_ip}}{% endif %} ansible_user=cumulus{% endfor %}
+{% endfor -%}
+

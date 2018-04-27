@@ -1,0 +1,5 @@
+{%- if "ubuntu" in node["vm_os"].lower() -%}
+    
+    # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
+    device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
+{%- endif -%}
