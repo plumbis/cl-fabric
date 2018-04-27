@@ -13,7 +13,7 @@ graph vx {
  "server04" [function="host" os="yk0/ubuntu-xenial" memory="512"]
  "edge01" [function="host" os="yk0/ubuntu-xenial" memory="512" ]
  "internet" [function="internet" vagrant="swp48" os="CumulusCommunity/cumulus-vx" version="3.5.3" memory="768" ]
- "netq-ts" [function="netq-ts" vagrant="eth0" os="netq/ts" memory="1024"]
+ "netq-ts" [function="netq-ts" vagrant="eth0" os="cumulus/ts" memory="1024"]
 
  "leaf01":"swp51" -- "spine01":"swp1"
  "leaf02":"swp51" -- "spine01":"swp2"

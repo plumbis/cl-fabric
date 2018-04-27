@@ -2520,7 +2520,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "netq-ts" do |device|
     
     device.vm.hostname = "netq-ts"
-    device.vm.box = "netq/ts"
+    device.vm.box = "cumulus/ts"
 
     device.vm.provider "libvirt" do |v|      
         v.memory = 1024    
@@ -2546,6 +2546,9 @@ Vagrant.configure("2") do |config|
     device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
 
     
+    # Copy over Topology.dot File
+    device.vm.provision "file", source: "topology.dot", destination: "~/topology.dot"
+    device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
     # Install Rules for the interface re-map
     device.vm.provision :shell , :inline => <<-delete_udev_directory
