@@ -19,7 +19,11 @@ iface mgmt
   vrf-table auto
 EOT
 
+# Passwordless Sudo
 echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
+
+# Disable AAA lookups for APT
+sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
 
 reboot
 exit 0

@@ -1441,7 +1441,7 @@ def render_dhcpd_hosts(inventory, topology_file, input_dir):
         # The mac is stored as 0x...., send the substring without the 0x part to be formatted
         mac_address = format_mac(node.mgmt_mac[2:].zfill(12))
         node_dict[node.hostname] = {
-            "mac": mac_address, "ip": node.mgmt_ip}
+            "mac": mac_address, "ip": node.mgmt_ip.ip}
 
         if "ztp" in node.other_attributes:
             node_dict[node.hostname]["ztp"] = node.other_attributes["ztp"]
