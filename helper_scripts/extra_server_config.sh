@@ -41,6 +41,12 @@ if [ "$?" == "0" ]; then
     echo -e "DEVICE=eth0\nBOOTPROTO=dhcp\nONBOOT=yes" > /etc/sysconfig/network-scripts/ifcfg-eth0
 fi
 
+mkdir -p /home/cumulus/.ssh
+wget http://192.168.200.254/authorized_keys -q -O /home/cumulus/.ssh/authorized_keys
+chmod 700 -R /home/cumulus
+chown -R cumulus:cumulus /home/cumulus
+chmod 600 /home/cumulus/.ssh/*
+chmod 700 /home/cumulus/.ssh
 
 echo "#################################"
 echo "   Finished"
