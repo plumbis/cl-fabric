@@ -46,7 +46,6 @@ install_puppet(){
 install_ansible(){
     echo " ### Installing Ansible... ###"
     apt-get install -qy ansible sshpass libssh-dev python-dev libssl-dev libffi-dev
-    pip install pip --upgrade
     pip install setuptools --upgrade
     pip install ansible==$ansible_version --upgrade
 }
@@ -101,7 +100,11 @@ echo " ### Updating APT Repository... ###"
 apt-get update -y
 
 echo " ### Installing Packages... ###"
-apt-get install -y htop isc-dhcp-server tree apache2 vlan git python-pip dnsmasq ifenslave apt-cacher-ng lldpd ntp
+# Do not install python-pip via apt. It breaks pip. See https://github.com/pypa/pip/issues/5221
+apt-get install -y htop isc-dhcp-server tree apache2 vlan git dnsmasq ifenslave apt-cacher-ng lldpd ntp
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+rm get-pip.py
 modprobe 8021q
 #modprobe bonding
 echo "8021q" >> /etc/modules
