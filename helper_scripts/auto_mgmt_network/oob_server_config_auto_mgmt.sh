@@ -211,6 +211,9 @@ cat <<EOT >> /home/cumulus/.gitconfig
     editor = vim
 EOT
 
+echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
+echo "exit" >> /home/vagrant/.bash_profile
+
 echo "############################################"
 echo "      DONE!"
 echo "############################################"
