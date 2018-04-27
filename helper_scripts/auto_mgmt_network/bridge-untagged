@@ -5,7 +5,7 @@ auto bridge
 iface bridge
     bridge-vlan-aware yes
     bridge-vids 1
-    bridge-ports swp2 swp3 swp1 swp6 swp4 swp5
+    bridge-ports swp10 swp11 swp12 swp13 swp14 swp15 swp16 swp8 swp9 swp2 swp3 swp1 swp6 swp7 swp4 swp5
   
 
 auto vlan1

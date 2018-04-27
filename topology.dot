@@ -11,10 +11,8 @@ graph vx {
  "server02" [function="host" os="yk0/ubuntu-xenial" memory="512"]
  "server03" [function="host" os="yk0/ubuntu-xenial" memory="512"]
  "server04" [function="host" os="yk0/ubuntu-xenial" memory="512"]
- "edge01" [function="host" os="yk0/ubuntu-xenial" memory="768" ]
+ "edge01" [function="host" os="yk0/ubuntu-xenial" memory="512" ]
  "internet" [function="internet" vagrant="swp48" os="CumulusCommunity/cumulus-vx" version="3.5.3" memory="768" ]
- "oob-mgmt-switch" [function="oob-switch" vagrant="eth0" os="CumulusCommunity/cumulus-vx" version="3.5.3" memory="256"]
- "oob-mgmt-server" [function="oob-server" vagrant="eth0" os="CumulusCommunity/vx_oob_server" version="1.0.4" memory="1024"]
  "netq-ts" [function="netq-ts" vagrant="eth0" os="netq/ts" memory="1024"]
 
  "leaf01":"swp51" -- "spine01":"swp1"
@@ -36,14 +34,14 @@ graph vx {
  "exit01":"swp49" -- "exit02":"swp49"
  "exit01":"swp50" -- "exit02":"swp50"
 
- "server01":"eth1" -- "leaf01":"swp1" [left_mac="00:03:00:11:11:01"]
- "server01":"eth2" -- "leaf02":"swp1" [left_mac="00:03:00:11:11:02"]
- "server02":"eth1" -- "leaf01":"swp2" [left_mac="00:03:00:22:22:01"]
- "server02":"eth2" -- "leaf02":"swp2" [left_mac="00:03:00:22:22:02"]
- "server03":"eth1" -- "leaf03":"swp1" [left_mac="00:03:00:33:33:01"]
- "server03":"eth2" -- "leaf04":"swp1" [left_mac="00:03:00:33:33:02"]
- "server04":"eth1" -- "leaf03":"swp2" [left_mac="00:03:00:44:44:01"]
- "server04":"eth2" -- "leaf04":"swp2" [left_mac="00:03:00:44:44:02"]
+ "server01":"eth1" -- "leaf01":"swp1" 
+ "server01":"eth2" -- "leaf02":"swp1" 
+ "server02":"eth1" -- "leaf01":"swp2" 
+ "server02":"eth2" -- "leaf02":"swp2" 
+ "server03":"eth1" -- "leaf03":"swp1" 
+ "server03":"eth2" -- "leaf04":"swp1" 
+ "server04":"eth1" -- "leaf03":"swp2"
+ "server04":"eth2" -- "leaf04":"swp2" 
 
  "exit01":"swp51" -- "spine01":"swp30"
  "exit01":"swp52" -- "spine02":"swp30"
@@ -68,22 +66,5 @@ graph vx {
 
  "edge01":"eth1" -- "exit01":"swp1"
  "edge01":"eth2" -- "exit02":"swp1"
-
- "oob-mgmt-server":"eth1" -- "oob-mgmt-switch":"swp1" [right_mac="a0:00:00:00:00:61"]
- "server01":"eth0" -- "oob-mgmt-switch":"swp2" [left_mac="a0:00:00:00:00:31"]
- "server02":"eth0" -- "oob-mgmt-switch":"swp3" [left_mac="a0:00:00:00:00:32"]
- "server03":"eth0" -- "oob-mgmt-switch":"swp4" [left_mac="a0:00:00:00:00:33"]
- "server04":"eth0" -- "oob-mgmt-switch":"swp5" [left_mac="a0:00:00:00:00:34"]
- "leaf01":"eth0" -- "oob-mgmt-switch":"swp6" [left_mac="a0:00:00:00:00:11"]
- "leaf02":"eth0" -- "oob-mgmt-switch":"swp7" [left_mac="a0:00:00:00:00:12"]
- "leaf03":"eth0" -- "oob-mgmt-switch":"swp8" [left_mac="a0:00:00:00:00:13"]
- "leaf04":"eth0" -- "oob-mgmt-switch":"swp9" [left_mac="a0:00:00:00:00:14"]
- "spine01":"eth0" -- "oob-mgmt-switch":"swp10" [left_mac="a0:00:00:00:00:21"]
- "spine02":"eth0" -- "oob-mgmt-switch":"swp11" [left_mac="a0:00:00:00:00:22"]
- "exit01":"eth0" -- "oob-mgmt-switch":"swp12" [left_mac="a0:00:00:00:00:41"]
- "exit02":"eth0" -- "oob-mgmt-switch":"swp13" [left_mac="a0:00:00:00:00:42"]
- "edge01":"eth0" -- "oob-mgmt-switch":"swp14" [left_mac="a0:00:00:00:00:51"]
- "internet":"eth0" -- "oob-mgmt-switch":"swp15" [left_mac="a0:00:00:00:00:50"]
- "netq-ts":"eth1" -- "oob-mgmt-switch":"swp16"
 
 }

@@ -1,19 +1,37 @@
 # Created by Topology-Converter v5.0.0
 #    Template Revision: v5.0.0
 #    https://github.com/cumulusnetworks/topology_converter
-#    using topology data from: ./tests/dot_files/simple.dot
+#    using topology data from: topology.dot
 
-[spines]
-spine01 ansible_host=192.168.200.6 ansible_user=cumulus
-
-[oob-servers]
-oob-mgmt-server ansible_host=192.168.200.254 ansible_user=cumulus
+[netq-tses]
+netq-ts ansible_host=192.168.200.3 ansible_user=cumulus
 
 [leafs]
 leaf04 ansible_host=192.168.200.2 ansible_user=cumulus
-leaf02 ansible_host=192.168.200.3 ansible_user=cumulus
-leaf03 ansible_host=192.168.200.4 ansible_user=cumulus
-leaf01 ansible_host=192.168.200.5 ansible_user=cumulus
+leaf02 ansible_host=192.168.200.4 ansible_user=cumulus
+leaf03 ansible_host=192.168.200.5 ansible_user=cumulus
+leaf01 ansible_host=192.168.200.6 ansible_user=cumulus
+
+[spines]
+spine02 ansible_host=192.168.200.9 ansible_user=cumulus
+spine01 ansible_host=192.168.200.10 ansible_user=cumulus
 
 [oob-switches]
 oob-mgmt-switch ansible_host=192.168.200.1 ansible_user=cumulus
+
+[hosts]
+edge01 ansible_host=192.168.200.7 ansible_user=cumulus
+server01 ansible_host=192.168.200.13 ansible_user=cumulus
+server03 ansible_host=192.168.200.14 ansible_user=cumulus
+server02 ansible_host=192.168.200.15 ansible_user=cumulus
+server04 ansible_host=192.168.200.16 ansible_user=cumulus
+
+[exits]
+exit02 ansible_host=192.168.200.11 ansible_user=cumulus
+exit01 ansible_host=192.168.200.12 ansible_user=cumulus
+
+[internets]
+internet ansible_host=192.168.200.8 ansible_user=cumulus
+
+[oob-servers]
+oob-mgmt-server ansible_host=192.168.200.254 ansible_user=cumulus
