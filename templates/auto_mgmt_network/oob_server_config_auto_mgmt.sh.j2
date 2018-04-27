@@ -18,6 +18,9 @@ echo " Detected vagrant user is: $username"
 REPOSITORY="https://github.com/CumulusNetworks/{{customer}}"
 REPONAME="{{customer}}"
 
+# Hides "dpkg-reconfigure: unable to re-open stdin: No file or directory" error in Vagrant up
+export DEBIAN_FRONTEND=noninteractive
+
 #Install Automation Tools
 puppet=0
 ansible=1
