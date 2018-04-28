@@ -51,3 +51,8 @@
   command: netq config restart agent
   tags:
       - netq
+
+- name: Enable NetQL
+  command: netq config add experimental
+  tags:
+    - netq
