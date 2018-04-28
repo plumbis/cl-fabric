@@ -65,11 +65,9 @@ node:
     ports:
       swp1:
         alias: server01
-        vlan: 100
         mtu: 9000
       swp2:
         alias: server02
-        vlan: 101
         mtu: 9000
       swp49:
         alias: leaf02
@@ -93,15 +91,22 @@ node:
           - swp2
         trunk: false
         vlans:
-          - 101
+          - 200
     bridge:
       vlans:
         - 100
-        - 101
+        - 200
       ports:
         - peerlink
         - bond01
         - bond02
+    vrfs:
+      red:
+        vlan_member: 100
+        mac: 44:39:39:FF:40:94
+      blue:
+        vlan_member: 200
+        mac: 44:39:39:FF:40:95
 
   leaf02:
     lo: 10.0.0.12/32
@@ -159,6 +164,13 @@ node:
         - peerlink
         - bond01
         - bond02
+    vrfs:
+      red:
+        vlan_member: 100
+        mac: 44:39:39:FF:40:94
+      blue:
+        vlan_member: 200
+        mac: 44:39:39:FF:40:95
 
   leaf03:
     lo: 10.0.0.13/32
@@ -218,6 +230,13 @@ node:
         - peerlink
         - bond01
         - bond02
+    vrfs:
+      red:
+        vlan_member: 100
+        mac: 44:39:39:FF:40:96
+      blue:
+        vlan_member: 200
+        mac: 44:39:39:FF:40:97
 
   leaf04:
     lo: 10.0.0.14/32
@@ -275,7 +294,14 @@ node:
         - peerlink
         - bond01
         - bond02
-
+    vrfs:
+      red:
+        vlan_member: 100
+        mac: 44:39:39:FF:40:96
+      blue:
+        vlan_member: 200
+        mac: 44:39:39:FF:40:97
+        
   spine01:
     lo: 10.0.0.21/32
     bgp:

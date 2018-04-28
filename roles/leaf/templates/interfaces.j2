@@ -1,3 +1,4 @@
+{% set vlans = node[inventory_hostname] ["bridge"]["vlans"] %}
 # The loopback network interface
 auto lo
 iface lo inet loopback
@@ -15,15 +16,21 @@ iface mgmt
   address 127.0.0.1/8
   vrf-table auto
 
+{% for vrf in node[inventory_hostname]["vrfs"] %}
+auto vrf-{{ vrf }}
+iface vrf-{{ vrf }}
+    vrf-table auto
+    
+{% endfor %}
 
-{% for interface in node[inventory_hostname]["ports"] -%}
+{%-  for interface in node[inventory_hostname]["ports"] -%}
 auto {{interface}}
 iface {{interface}}
    {% if node[inventory_hostname]["ports"][interface]["mtu"] is defined -%}
    mtu {{ node[inventory_hostname]["ports"][interface]["mtu"] }}
    {% else -%}
    mtu 9216
-   {% endif -%}
+   {%- endif -%}
   {% for bond in node[inventory_hostname]["bonds"] -%}
     {%- for member in node[inventory_hostname]["bonds"][bond]["members"] -%}
       {%- if member == interface -%}
@@ -32,7 +39,7 @@ iface {{interface}}
     {%- endfor -%}
    {%- endfor %}
 
-  {%- for member in node[inventory_hostname]["mlag"]["peerlink"] -%}
+  {% for member in node[inventory_hostname]["mlag"]["peerlink"] -%}
     {%- if member == interface -%}
    post-up ip link set {{ interface }} promisc on
     {% endif -%}
@@ -62,16 +69,15 @@ iface {{bond}}
 
 {% endfor %}
 
-{% set vlans = node[inventory_hostname] ["bridge"]["vlans"] %}
 auto bridge
 iface bridge
   bridge-vlan-aware yes
-  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }} vni{{ vlans | join(" vni") }} 
+  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }} vni{{ vlans | join(" vni") }} vxlan-tunnel{{ vlans | join(" vxlan-tunnel") }} {% for vrf in node["leaf01"]["vrfs"] %} vxlan-tunnel-{{ vrf }} {%- endfor -%}
   bridge-vids {{ vlans | join(" ") }}
 
 {% for vlan in vlans %}
-auto vni{{ vlan }}
-iface vni{{ vlan }}
+auto vxlan-tunnel{{ vlan }}
+iface vxlan-tunnel{{ vlan }}
   mtu 9000
   vxlan-id {{ vlan }}
   vxlan-local-tunnelip {{ node[inventory_hostname]["mlag"]["anycast-ip"] }} 
@@ -83,10 +89,31 @@ iface vni{{ vlan }}
 
 auto vlan{{ vlan }}
 iface vlan{{ vlan }}
+  {% for vrf in node[inventory_hostname]["vrfs"] -%}
+      {%- if member == node[inventory_hostname]["vrfs"][vrf]["vlan_member"] -%}
+   vrf vrf-{{ vrf }}
+      {% endif -%}
+   {%- endfor %}
   address 172.16.{{ vlan }}.{{ node[inventory_hostname]["lo"].split("/")[0][:1] }}0/24
   address-virtual 44:39:39:ff:00:13 172.16.{{ vlan }}.1/24
   vlan-raw-device bridge
-  
 {% endfor %}
+
+{% for vrf in node[inventory_hostname]["vrfs"] %}
+auto vxlan-tunnel-{{ vrf }}
+iface vxlan-tunnel-{{ vrf }}
+   vxlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+   vxlan-local-tunnelip {{ node[inventory_hostname]["mlag"]["anycast-ip"] }} 
+   bridge-learning off
+   bridge-access {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+
+auto vlan{{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+iface vlan{{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+  hwaddress {{ node[inventory_hostname]["vrfs"][vrf]["mac"] }}
+  vlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+  vrf {{ vrf }}
+
+{% endfor %}
+
 
 {% endif %}
