@@ -20,11 +20,13 @@ spine01 ansible_host=192.168.200.10 ansible_user=cumulus
 oob-mgmt-switch ansible_host=192.168.200.1 ansible_user=cumulus
 
 [hosts]
-edge01 ansible_host=192.168.200.7 ansible_user=cumulus
 server01 ansible_host=192.168.200.13 ansible_user=cumulus
 server03 ansible_host=192.168.200.14 ansible_user=cumulus
 server02 ansible_host=192.168.200.15 ansible_user=cumulus
 server04 ansible_host=192.168.200.16 ansible_user=cumulus
+
+[edges]
+edge01 ansible_host=192.168.200.7 ansible_user=cumulus
 
 [exits]
 exit02 ansible_host=192.168.200.11 ansible_user=cumulus
