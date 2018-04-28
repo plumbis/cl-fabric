@@ -16,7 +16,7 @@ node:
       address: 169.254.1.1/30
       peer-ip: 169.254.1.2
       backup-ip: 10.0.0.12
-      sysmac: 44:38:39:FF:01:02
+      sysmac: 44:38:39:FF:01:01
       anycast-ip: 10.100.100.12
     ports:
       swp1:
@@ -73,7 +73,7 @@ node:
       address: 169.254.1.2/30
       peer-ip: 169.254.1.1
       backup-ip: 10.0.0.11
-      sysmac: 44:38:39:FF:01:02
+      sysmac: 44:38:39:FF:01:01
       anycast-ip: 10.100.100.12
     ports:
       swp1:
