@@ -51,7 +51,6 @@ echo "### Installing SSH Keys"
 mkdir -p /home/cumulus/.ssh
 chmod 700 -R /home/cumulus
 chown -R cumulus:cumulus /home/cumulus
-chmod 600 /home/cumulus/.ssh/*
 chmod 700 /home/cumulus/.ssh
 echo -e "wget http://192.168.200.254/authorized_keys -q -O /home/cumulus/.ssh/authorized_keys" > /etc/dhcp/dhclient-exit-hooks.d/get_keys
 
