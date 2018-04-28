@@ -2559,19 +2559,18 @@ Vagrant.configure("2") do |config|
     delete_udev_directory
 
     device.vm.provision :shell , :inline => <<-SET_INTERFACES
-cat <<EOT > /etc/network/interfaces 
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-# The primary network interface
-#auto eth0
-#iface eth0 inet dhcp
-
-auto swp1
-iface swp1 inet dhcp
-
-EOT
+    echo -e "# The loopback network interface" > /etc/network/interfaces
+    echo -e "auto lo" >> /etc/network/interfaces
+    echo -e "iface lo inet loopback" >> /etc/network/interfaces
+    echo -e "" >> /etc/network/interfaces
+    echo -e "# The primary network interface" >> /etc/network/interfaces
+    echo -e "#auto eth0" >> /etc/network/interfaces
+    echo -e "#iface eth0 inet dhcp" >> /etc/network/interfaces
+    echo -e "" >> /etc/network/interfaces
+    echo -e "auto eth1" >> /etc/network/interfaces
+    echo -e "iface eth1 inet dhcp" >> /etc/network/interfaces
+    
+    SET_INTERFACES
 SET_INTERFACES
 
 
