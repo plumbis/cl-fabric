@@ -1,14 +1,14 @@
 ---
 - hosts: spines
-  gather_facts: no
-  become: true
+  gather_facts: "no"
+  become: "yes"
   roles:
   - setup
   - spine
 
 - hosts: leafs
-  gather_facts: no
-  become: true 
+  gather_facts: "no"
+  become: "yes"
   roles:
   - setup
   - leaf
