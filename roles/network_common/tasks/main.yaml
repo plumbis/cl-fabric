@@ -56,3 +56,11 @@
   command: netq config add experimental
   tags:
     - netq
+
+- name: Copy FRR daemons file
+  copy:
+    src: daemons
+    dest: /etc/frr/daemons
+  notify: restart frr
+  tags:
+    - frr

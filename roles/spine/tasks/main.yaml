@@ -1,11 +1,4 @@
 ---
-- name: Copy FRR daemons file
-  copy:
-    src: daemons
-    dest: /etc/frr/daemons
-    backup: yes
-  notify: restart frr
-
 - name: Copy interfaces configuration
   template:
     src: interfaces.j2
