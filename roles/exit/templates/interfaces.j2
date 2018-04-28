@@ -1,7 +1,7 @@
 # The loopback network interface
 auto lo
 iface lo inet loopback
-   address {{node[inventory_hostname]["lo"]}}
+   address {{ node[inventory_hostname]["lo"] }}
 
 auto eth0
 iface eth0 inet dhcp
@@ -44,7 +44,7 @@ iface bridge
 auto vxlan-tun-{{ vrf }}
 iface vxlan-tun-{{ vrf }}
    vxlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
-   vxlan-local-tunnelip {{ node["lo"] }} 
+   vxlan-local-tunnelip {{ node[inventory_hostname]["lo"] }} 
    bridge-learning off
    bridge-access {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
 
