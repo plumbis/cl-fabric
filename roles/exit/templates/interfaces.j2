@@ -44,7 +44,7 @@ iface bridge
 auto vxlan-tun-{{ vrf }}
 iface vxlan-tun-{{ vrf }}
    vxlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
-   vxlan-local-tunnelip {{ node[inventory_hostname]["lo"] }} 
+   vxlan-local-tunnelip {{ node[inventory_hostname]["lo"] | replace("/32", "") }} 
    bridge-learning off
    bridge-access {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
 
