@@ -22,3 +22,9 @@
   become: "yes"
   roles:
     - server
+
+- hosts: exits
+  gather_facts: "no"
+  become: "yes"
+  roles:
+    - exit
