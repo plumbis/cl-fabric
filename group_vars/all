@@ -130,9 +130,11 @@ node:
       swp1:
         alias: server01
         vlan: 100
+        mtu: 9000
       swp2:
         alias: server02
         vlan: 101
+        mtu: 9000
       swp49:
         alias: leaf01
       swp50:
@@ -301,7 +303,7 @@ node:
       blue:
         vlan_member: 200
         mac: 44:39:39:FF:40:97
-        
+
   spine01:
     lo: 10.0.0.21/32
     bgp:
