@@ -25,6 +25,14 @@ echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
 # Disable AAA lookups for APT
 sed -i -e 's/#precedence ::ffff:0:0\/96  10/#precedence ::ffff:0:0\/96  100/g' /etc/gai.conf
 
+# Update GPG keys to solve KB issue https://support.cumulusnetworks.com/hc/en-us/articles/360002663013-Updating-Expired-GPG-Keys
+wget https://repo3.cumulusnetworks.com/repo/pool/cumulus/c/cumulus-archive-keyring/cumulus-archive-keyring_3-cl3u4_all.deb
+sudo dpkg -i cumulus-archive-keyring_3-cl3u4_all.deb
+
+apt-get update
+apt-get install python-apt
+
+
 reboot
 exit 0
 #CUMULUS-AUTOPROVISIONING
