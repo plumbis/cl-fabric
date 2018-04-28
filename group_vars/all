@@ -1,5 +1,49 @@
 ---
 node:
+  exit01:
+    lo: 10.0.0.41/32
+    bgp:
+      asn: '65041'
+      evpn: true
+      peers:
+        - swp49
+        - swp50
+        - swp51
+        - swp52
+    ports:
+      swp44:
+        alias: internet
+      swp49:
+        alias: exit02
+      swp50:
+        alias: exit02
+      swp51:
+        alias: spine01
+      swp52:
+        alias: spine02
+  
+  exit02:
+    lo: 10.0.0.42/32
+    bgp:
+      asn: '65042'
+      evpn: true
+      peers:
+        - swp49
+        - swp50
+        - swp51
+        - swp52
+    ports:
+      swp44:
+        alias: internet
+      swp49:
+        alias: exit02
+      swp50:
+        alias: exit02
+      swp51:
+        alias: spine01
+      swp52:
+        alias: spine02
+
   leaf01:
     lo: 10.0.0.11/32
     bgp:
@@ -22,9 +66,11 @@ node:
       swp1:
         alias: server01
         vlan: 100
+        mtu: 9000
       swp2:
         alias: server02
         vlan: 101
+        mtu: 9000
       swp49:
         alias: leaf02
       swp50:
@@ -240,6 +286,7 @@ node:
         - swp2
         - swp3
         - swp4
+        - swp29
     ports:
       swp1:
         alias: leaf01
@@ -249,6 +296,10 @@ node:
         alias: leaf03
       swp4:
         alias: leaf04
+      swp29:
+        alias: exit02
+      swp30:
+        alias: exit01
 
   spine02:
     lo: 10.0.0.22/32
@@ -260,6 +311,8 @@ node:
         - swp2
         - swp3
         - swp4
+        - swp29
+        - swp30
     ports:
       swp1:
         alias: leaf01
@@ -269,6 +322,10 @@ node:
         alias: leaf03
       swp4:
         alias: leaf04
+      swp29:
+        alias: exit02
+      swp30:
+        alias: exit01
   
   server01:
     ports:
