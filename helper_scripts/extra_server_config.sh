@@ -48,15 +48,14 @@ sudo adduser cumulus sudo
 echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
 
 echo "### Installing SSH Keys"
-cat << DONE > /etc/dhcp/dhclient-exit-hooks.d/get_keys
-#!/bin/bash
-
 mkdir -p /home/cumulus/.ssh
-wget http://192.168.200.254/authorized_keys -q -O /home/cumulus/.ssh/authorized_keys
 chmod 700 -R /home/cumulus
 chown -R cumulus:cumulus /home/cumulus
 chmod 600 /home/cumulus/.ssh/*
 chmod 700 /home/cumulus/.ssh
+
+cat << DONE > /etc/dhcp/dhclient-exit-hooks.d/get_keys
+wget http://192.168.200.254/authorized_keys -q -O /home/cumulus/.ssh/authorized_keys
 
 DONE
 
