@@ -38,6 +38,7 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
       neighbor {{ interface }} remote-as external
       neighbor {{ interface }} timers 1 3
     {% endif %}
+   {% endfor %}
  !
   {% endfor %}
  {% if node[inventory_hostname]["bgp"]["evpn"] is defined %}
