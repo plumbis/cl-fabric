@@ -1,3 +1,4 @@
+---
 node:
   leaf01:
     lo: 10.0.0.11/32
@@ -5,9 +6,9 @@ node:
       asn: '65011'
       evpn: true
       peers:
-      - swp51
-      - swp52
-      - peerlink.4094
+        - swp51
+        - swp52
+        - peerlink.4094
     mlag:
       peerlink:
         - swp49
@@ -17,19 +18,13 @@ node:
       backup-ip: 10.0.0.12
       sysmac: 44:38:39:FF:01:02
       anycast-ip: 10.100.100.12
-    vlans:
-    - 1001
-    - 1002
-    - 1003
-    - 1004
     ports:
       swp1:
         alias: server01
-        mlag: false 
-        trunk: false
-        vlan: 1001
+        vlan: 100
       swp2:
         alias: server02
+        vlan: 101
       swp49:
         alias: leaf02
       swp50:
@@ -38,228 +33,197 @@ node:
         alias: spine01
       swp52:
         alias: spine02
+    bonds:
       bond01:
-        mlag-id: 1
+        mlag_id: 1
         members:
           - swp1
-      bond02:
-        mlag-id: 2
-        member:
-          - swp2
-        
+        trunk: false
+        vlans:
+          - 101
+        bond02:
+          mlag_id: 2
+          member:
+            - swp2
+          trunk: false
+          vlans:
+            - 102
+    bridge:
+      vlans:
+        - 101
+        - 1002
+      ports:
+        - peerlink
+        - bond01
+        - bond02
+
   leaf02:
     lo: 10.0.0.12/32
     bgp:
       asn: '65012'
       evpn: true
       peers:
-      - swp51
-      - swp52
-      - peerlink.4094
+        - swp51
+        - swp52
+        - peerlink.4094
     mlag:
-      members:
-      - swp53
-      - swp54
+      peerlink:
+        - swp49
+        - swp50
       address: 169.254.1.2/30
       peer-ip: 169.254.1.1
-      backup-ip: 192.168.200.7
+      backup-ip: 10.0.0.11
       sysmac: 44:38:39:FF:01:02
-    overlay:
       anycast-ip: 10.100.100.12
-      l2domains:
-        - 1001
-        - 1002
-        - 1003
-        - 1004
     ports:
       swp1:
-        mlag: false
-        trunk: false
-        vlan: 1001
+        alias: server01
+        vlan: 100
+      swp2:
+        alias: server02
+        vlan: 101
+      swp49:
+        alias: leaf01
+      swp50:
+        alias: leaf01
+      swp51:
+        alias: spine01
+      swp52:
+        alias: spine02
+    bonds:
       bond01:
-        mlag: true
-        mlag-id: 1
+        mlag_id: 1
         members:
-        - swp2
-        trunk: true
+          - swp1
+        trunk: false
         vlans:
-        - 1001
-        - 1002
+          - 101
+        bond02:
+          mlag_id: 2
+          member:
+            - swp2
+          trunk: false
+          vlans:
+            - 102
+    bridge:
+      vlans:
+        - 101
+        - 102
+      ports:
+        - peerlink
+        - bond01
+        - bond02
 
   leaf03:
-    lo: 10.0.0.3/32
+    lo: 10.0.0.13/32
     bgp:
-      asn: '65403'
+      asn: '65013'
       evpn: true
       peers:
-      - swp49
-      - swp50
-      - peerlink.4094
+        - swp51
+        - swp52
+        - peerlink.4094
     mlag:
-      members:
-      - swp53
-      - swp54
+      peerlink:
+        - swp49
+        - swp50
       address: 169.254.1.1/30
       peer-ip: 169.254.1.2
-      backup-ip: 192.168.200.2
-      sysmac: 44:38:39:FF:03:04
-    overlay:
+      backup-ip: 10.0.0.14
+      sysmac: 44:38:39:FF:01:02
       anycast-ip: 10.100.100.34
-      l2domains:
-        - 1001
-        - 1002
-        - 1003
-        - 1004
     ports:
       swp1:
-        mlag: false
-        trunk: false
-        vlan: 1006 
+        alias: server03
+        vlan: 100
+      swp2:
+        alias: server04
+        vlan: 101
+      swp49:
+        alias: leaf04
+      swp50:
+        alias: leaf04
+      swp51:
+        alias: spine01
+      swp52:
+        alias: spine02
+    bonds:
       bond01:
-        mlag: true
-        mlag-id: 1
+        mlag_id: 1
         members:
-        - swp2
-        trunk: true
+          - swp1
+        trunk: false
         vlans:
-        - 1006
-        - 1007
-        - 1008
+          - 101
+        bond02:
+          mlag_id: 2
+          member:
+            - swp2
+          trunk: false
+          vlans:
+            - 102
+    bridge:
+      vlans:
+        - 101
+        - 102
+      ports:
+        - peerlink
+        - bond01
+        - bond02
 
   leaf04:
-    lo: 10.0.0.4/32
+    lo: 10.0.0.14/32
     bgp:
-      asn: '65404'
+      asn: '65414'
       evpn: true
       peers:
-      - swp49
-      - swp50
-      - peerlink.4094
+        - swp51
+        - swp52
+        - peerlink.4094
     mlag:
-      members:
-      - swp53
-      - swp54
+      peerlink:
+        - swp49
+        - swp50
       address: 169.254.1.2/30
       peer-ip: 169.254.1.1
-      backup-ip: 192.168.200.2
-      sysmac: 44:38:39:FF:03:04
-    overlay:
+      backup-ip: 10.0.0.13
+      sysmac: 44:38:39:FF:01:02
       anycast-ip: 10.100.100.34
-      l2domains:
-        - 1001
-        - 1002
-        - 1003
-        - 1004
     ports:
       swp1:
-        mlag: false
-        trunk: true
-        vlans:
-        - 100
-        - 200
-
-  exit01:
-    lo: 10.255.255.1/32
-    bgp:
-      asn: '65301'
-      evpn: true
-      peers:
-      - swp49
-      - swp50
-      - peerlink.4094
-    mlag:
-      members:
-      - swp53
-      - swp54
-      address: 169.254.1.1/30
-      peer-ip: 169.254.1.2
-      backup-ip: 192.168.200.14
-      sysmac: 44:38:39:FF:11:12
-    overlay:
-      anycast-ip: 10.100.101.12
-      l2domains:
-        - 1001
-        - 1002
-        - 1003
-        - 1004
-    ports:
-      swp1:
-        mlag: false
-        trunk: false
-        vlan: 1006 
+        alias: server03
+        vlan: 100
+      swp2:
+        alias: server04
+        vlan: 101
+      swp49:
+        alias: leaf03
+      swp50:
+        alias: leaf03
+      swp51:
+        alias: spine01
+      swp52:
+        alias: spine02
+    bonds:
       bond01:
-        mlag: true
-        mlag-id: 1
+        mlag_id: 1
         members:
-        - swp2
-        trunk: true
-        vlans:
-        - 1006
-        - 1007
-        - 1008
-  
-  exit02:
-    lo: 10.255.255.2/32
-    bgp:
-      asn: '65302'
-      evpn: true
-      peers:
-      - swp49
-      - swp50
-      - peerlink.4094
-    mlag:
-      members:
-      - swp53
-      - swp54
-      address: 169.254.1.2/30
-      peer-ip: 169.254.1.1
-      backup-ip: 192.168.200.16
-      sysmac: 44:38:39:FF:11:12
-    overlay:
-      anycast-ip: 10.100.101.12
-      l2domains:
-        - 1001
-        - 1002
-        - 1003
-        - 1004
-    ports:
-      swp1:
-        mlag: false
+          - swp1
         trunk: false
-        vlan: 1006
-      bond01:
-        mlag: true
-        mlag-id: 1
-        members:
-        - swp2
-        trunk: true
         vlans:
-        - 1006
-        - 1007
-        - 1008
-
-  spine01:
-    lo: 10.0.0.21/32
-    bgp:
-      asn: '65020'
-      evpn: true
-      peers:
-      - swp1
-      - swp2
-      - swp3
-      - swp4
-      - swp29
-      - swp30
-
-  spine02:
-    lo: 10.0.0.22/32
-    bgp:
-      asn: '65020'
-      evpn: true
-      peers:
-      - swp1
-      - swp2
-      - swp3
-      - swp4
-      - swp29
-      - swp30
+          - 101
+        bond02:
+          mlag_id: 2
+          member:
+            - swp2
+          trunk: false
+          vlans:
+            - 102
+    bridge:
+      vlans:
+        - 101
+        - 102
+      ports:
+        - peerlink
+        - bond01
+        - bond02

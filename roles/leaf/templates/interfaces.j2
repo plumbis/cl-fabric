@@ -15,74 +15,71 @@ iface mgmt
   address 127.0.0.1/8
   vrf-table auto
 
-{% for interface in node[inventory_hostname]["bgp"]["peers"] -%}
+
+{% for interface in node[inventory_hostname]["ports"] -%}
 auto {{interface}}
 iface {{interface}}
    mtu 9216
+  {% if node[inventory_hostname]["bond_member"] is defined %}
+   post-up ip link set swp49 promisc on
+  {% endif %}
 {% endfor %}
 
 {% if node[inventory_hostname]["mlag"] is defined %}
 auto peerlink
 iface peerlink
-  bond-slaves {{ node[inventory_hostname]["mlag"]["members"] | join(" ") }} 
   mtu 9216
- 
+  bond-slaves {{ node[inventory_hostname]["mlag"]["peerlink"] | join(" ") }}
+
 auto peerlink.4094
 iface peerlink.4094
   address {{ node[inventory_hostname]["mlag"]["address"] }}
   clagd-peer-ip {{ node[inventory_hostname]["mlag"]["peer-ip"] }}
   clagd-backup-ip {{ node[inventory_hostname]["mlag"]["backup-ip"] }}
   clagd-sys-mac {{ node[inventory_hostname]["mlag"]["sysmac"] }}
-{% endif %}
 
+{% for bond in node[inventory_hostname]["bonds"] -%}
+auto {{bond}}
+iface {{bond}}
+  mtu 9000
+  bond-slaves {{ node[inventory_hostname]["bonds"][bond]["members"] | join(" ") }}
+  {% if node[inventory_hostname]["bonds"][bond]["trunk"] %}
+  {% else %}
+  {# If it's not a trunk, it's an access port #}
+  bridge-access {{ node[inventory_hostname]["bonds"][bond][vlans] | join (" ") }}
+  {% endif %}
+  clag-id {{ node[inventory_hostname]["bonds"][bond][mlag_id]}}
+
+{% endfor %}
+
+{% set vlans = node[inventory_hostname]["bridge"]["vlans"] | join (" ") }
 auto bridge
 iface bridge
   bridge-vlan-aware yes
-  bridge-ports {{ node[inventory_hostname]["ports"] | join(" ") }} regex vni.* peerlink
-  bridge-vids {{ node[inventory_hostname]["overlay"]["l2domains"] | join(" ") }} 
+  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }}
+  {%- for vlan in vlans  -%}
+    vni{{ vlan }}
+  {%- endfor -%}
+  bridge-vids {{ vlans }}
 
-{% if node[inventory_hostname]["overlay"] is defined %}
-{% for l2domain in node[inventory_hostname]["overlay"]["l2domains"] -%}
-auto vni{{l2domain}}
-iface vni{{l2domain}}
+{% for vlan in vlans %}
+auto vni{{ vlan }}
+iface vni{{ vlan }
   mtu 9000
-  vxlan-id {{l2domain}} 
-  vxlan-local-tunnelip {{ node[inventory_hostname]["overlay"]["anycast-ip"] }} 
-  bridge-access {{l2domain}}
+  vxlan-id {{ vlan }}
+  vxlan-local-tunnelip
+  vxlan-local-tunnelip {{ node[inventory_hostname]["mlag"]["anycast-ip"] }} 
+  bridge-access {{ vlan }}
   bridge-learning off
   mstpctl-bpduguard yes
   mstpctl-portbpdufilter yes
   bridge-arp-nd-suppress on
+
+auto vlan{{ vlan }}
+iface vlan{{ vlan }}
+  address 192.168.{{ vlan }}.{{ node[inventory_hostname]["lo"].split("/")[:1] }}/24
+  address-virtual 44:39:39:ff:00:13 192.168.{{ vlan }}.1/24
+  vlan-raw-device bridge
 {% endfor %}
-{% endif %}
 
-
-{% if node[inventory_hostname]["ports"] is defined %}
-{% for port in node[inventory_hostname]["ports"] -%}
-
-{% if node[inventory_hostname]["ports"][port]["mlag"] %}
-{% for member in node[inventory_hostname]["ports"][port]["members"] -%}
-auto {{member}}
-iface {{member}}
-{% endfor %}
-{% endif %}
-
-auto {{port}}
-iface {{port}}
-  mtu 9000
-  {% if node[inventory_hostname]["ports"][port]["alias"] is defined %}
-  alias {{ node[inventory_hostname]["ports"][port]["alias"] }}
-  {% endif %}
-  {% if node[inventory_hostname]["ports"][port]["mlag"] %}
-  clag-id {{ node[inventory_hostname]["ports"][port]["mlag-id"] }}
-  bond-slaves {{ node[inventory_hostname]["ports"][port]["members"] | join(" ") }}
-  mstpctl-bpduguard yes
-  mstpctl-portadminedge yes
-  {% endif %}
-  {% if node[inventory_hostname]["ports"][port]["trunk"] %}
-  bridge-vids {{ node[inventory_hostname]["ports"][port]["vlans"] | join(" ") }}
-  {% else %}
-  bridge-access {{ node[inventory_hostname]["ports"][port]["vlan"] }}
-  {% endif %}
-{% endfor %} 
 {% endif %}
