@@ -240,6 +240,15 @@ node:
         - swp2
         - swp3
         - swp4
+    ports:
+      swp1:
+        alias: leaf01
+      swp2:
+        alias: leaf02
+      swp3:
+        alias: leaf03
+      swp4:
+        alias: leaf04
 
   spine02:
     lo: 10.0.0.22/32
@@ -251,3 +260,12 @@ node:
         - swp2
         - swp3
         - swp4
+    ports:
+      swp1:
+        alias: leaf01
+      swp2:
+        alias: leaf02
+      swp3:
+        alias: leaf03
+      swp4:
+        alias: leaf04
