@@ -1,93 +1,90 @@
 ---
-- hosts: servers
-  become: yes
-  tasks:
-    - name: Copy Interface Config
-      copy:
-        src: configurations/{{ansible_hostname}}/interfaces
-        dest: /etc/network/interfaces
-      register: reboot
+- name: Copy Interface Config
+  copy:
+    src: configurations/{{ansible_hostname}}/interfaces
+    dest: /etc/network/interfaces
+  register: reboot
 
-    # Ping script is so servers generate traffic to populate MAC tables
-    # - name: Configure Server01 Ping Cronjob
-    #   cron:
-    #     name: "server ping"
-    #     job: "ping -c 1 10.1.3.103"
-    #   become: yes
-    #   become_user: cumulus
-    #   when: inventory_hostname == "server01"
+# Ping script is so servers generate traffic to populate MAC tables
+# - name: Configure Server01 Ping Cronjob
+#   cron:
+#     name: "server ping"
+#     job: "ping -c 1 10.1.3.103"
+#   become: yes
+#   become_user: cumulus
+#   when: inventory_hostname == "server01"
 
-    # - name: Configure Server02 Ping Cronjob
-    #   cron:
-    #     name: "server ping"
-    #     job: "ping -c 1 10.2.4.104"
-    #   become: yes
-    #   become_user: cumulus
-    #   when: inventory_hostname == "server02"
+# - name: Configure Server02 Ping Cronjob
+#   cron:
+#     name: "server ping"
+#     job: "ping -c 1 10.2.4.104"
+#   become: yes
+#   become_user: cumulus
+#   when: inventory_hostname == "server02"
 
-    # - name: Correct LLDP Settings
-    #   lineinfile:
-    #     dest: /etc/lldpd.d/port_info.conf
-    #     line: "configure lldp portidsubtype ifname"
-    #     create: yes
-    #   notify: restart LLDP
+# - name: Correct LLDP Settings
+#   lineinfile:
+#     dest: /etc/lldpd.d/port_info.conf
+#     line: "configure lldp portidsubtype ifname"
+#     create: yes
+#   notify: restart LLDP
 
-    # - name: Apply LLDP Settings
-    #   meta: flush_handlers
+# - name: Apply LLDP Settings
+#   meta: flush_handlers
 
-    - name: Add Cumulus Apt Key
-      apt_key:
-        url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
-        state: present
-      tags:
-        - netq
+- name: Add Cumulus Apt Key
+  apt_key:
+    url: "https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey"
+    state: present
+  tags:
+    - netq
 
-    - name: Add Cumulus Repo
-      apt_repository:
-        repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.3
-        state: present
-        update_cache: no
-      tags:
-        - netq
+- name: Add Cumulus Repo
+  apt_repository:
+    repo: deb https://apps3.cumulusnetworks.com/repos/deb xenial netq-1.3
+    state: present
+    update_cache: no
+  tags:
+    - netq
 
-    - name: Install NetQ
-      apt:
-        name: cumulus-netq
-        state: latest
-        update_cache: yes
-      register: install-netq
-      tags:
-        - netq
+- name: Install NetQ
+  apt:
+    name: cumulus-netq
+    state: latest
+    update_cache: yes
+  register: install-netq
+  tags:
+    - netq
 
-    - name: Restart Rsyslog
-      service:
-        name: rsyslog
-        state: restarted
-      when: install-netq.changed
-      tags:
-        - netq
+- name: Restart Rsyslog
+  service:
+    name: rsyslog
+    state: restarted
+  when: install-netq.changed
+  tags:
+    - netq
 
-    - name: Enable NetQ Service
-      service:
-        name: netqd
-        enabled: yes
-        state: started
-      tags:
-        - netq
+- name: Enable NetQ Service
+  service:
+    name: netqd
+    enabled: yes
+    state: started
+  tags:
+    - netq
 
-    - name: Add netq server IP
-      command: netq config add server 192.168.200.3
-      tags:
-        - netq
+- name: Add netq server IP
+  command: netq config add server 192.168.200.3
+  tags:
+    - netq
 
-    - name: Restart NetQ Agent
-      command: netq config restart agent
-      tags:
-        - netq
+- name: Restart NetQ Agent
+  command: netq config restart agent
+  tags:
+    - netq
 
-    - name: reboot
-      command: /sbin/shutdown -r +1
-      async: 0
-      poll: 0
-      ignore_errors: true
-      when: reboot.changed
+- name: reboot
+  command: /sbin/shutdown -r +1
+  async: 0
+  poll: 0
+  ignore_errors: true
+  when: reboot.changed
