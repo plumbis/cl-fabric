@@ -40,18 +40,18 @@ node:
           - swp1
         trunk: false
         vlans:
-          - 101
+          - 100
         bond02:
           mlag_id: 2
           member:
             - swp2
           trunk: false
           vlans:
-            - 102
+            - 101
     bridge:
       vlans:
+        - 100
         - 101
-        - 1002
       ports:
         - peerlink
         - bond01
@@ -97,18 +97,18 @@ node:
           - swp1
         trunk: false
         vlans:
-          - 101
+          - 100
         bond02:
           mlag_id: 2
           member:
             - swp2
           trunk: false
           vlans:
-            - 102
+            - 101
     bridge:
       vlans:
+        - 100
         - 101
-        - 102
       ports:
         - peerlink
         - bond01
@@ -156,18 +156,18 @@ node:
           - swp1
         trunk: false
         vlans:
-          - 101
+          - 100
         bond02:
           mlag_id: 2
           member:
             - swp2
           trunk: false
           vlans:
-            - 102
+            - 101
     bridge:
       vlans:
+        - 100
         - 101
-        - 102
       ports:
         - peerlink
         - bond01
@@ -213,18 +213,18 @@ node:
           - swp1
         trunk: false
         vlans:
-          - 101
+          - 100
         bond02:
           mlag_id: 2
           member:
             - swp2
           trunk: false
           vlans:
-            - 102
+            - 101
     bridge:
       vlans:
+        - 100
         - 101
-        - 102
       ports:
         - peerlink
         - bond01
