@@ -41,13 +41,13 @@ node:
         trunk: false
         vlans:
           - 100
-        bond02:
-          mlag_id: 2
-          member:
-            - swp2
-          trunk: false
-          vlans:
-            - 101
+      bond02:
+        mlag_id: 2
+        member:
+          - swp2
+        trunk: false
+        vlans:
+          - 101
     bridge:
       vlans:
         - 100
@@ -98,13 +98,13 @@ node:
         trunk: false
         vlans:
           - 100
-        bond02:
-          mlag_id: 2
-          member:
-            - swp2
-          trunk: false
-          vlans:
-            - 101
+      bond02:
+        mlag_id: 2
+        member:
+          - swp2
+        trunk: false
+        vlans:
+          - 101
     bridge:
       vlans:
         - 100
@@ -157,13 +157,13 @@ node:
         trunk: false
         vlans:
           - 100
-        bond02:
-          mlag_id: 2
-          member:
-            - swp2
-          trunk: false
-          vlans:
-            - 101
+      bond02:
+        mlag_id: 2
+        member:
+          - swp2
+        trunk: false
+        vlans:
+          - 101
     bridge:
       vlans:
         - 100
@@ -214,13 +214,13 @@ node:
         trunk: false
         vlans:
           - 100
-        bond02:
-          mlag_id: 2
-          member:
-            - swp2
-          trunk: false
-          vlans:
-            - 101
+      bond02:
+        mlag_id: 2
+        member:
+          - swp2
+        trunk: false
+        vlans:
+          - 101
     bridge:
       vlans:
         - 100
