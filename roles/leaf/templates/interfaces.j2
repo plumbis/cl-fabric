@@ -109,10 +109,11 @@ iface vxlan-tun-{{ vrf }}
 
 auto vlan{{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
 iface vlan{{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+  vlan-raw-device bridge
   hwaddress {{ node[inventory_hostname]["vrfs"][vrf]["mac"] }}
   vlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
   vrf {{ vrf }}
-
+  
 {% endfor %}
 
 
