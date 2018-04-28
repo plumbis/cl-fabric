@@ -9,32 +9,43 @@ node:
       - swp52
       - peerlink.4094
     mlag:
-      members:
-      - swp49
-      - swp50
+      peerlink:
+        - swp49
+        - swp50
       address: 169.254.1.1/30
       peer-ip: 169.254.1.2
       backup-ip: 10.0.0.12
       sysmac: 44:38:39:FF:01:02
-    overlay:
       anycast-ip: 10.100.100.12
-      l2domains:
-      - 1001
-      - 1002
-      - 1003
-      - 1004
+    vlans:
+    - 1001
+    - 1002
+    - 1003
+    - 1004
     ports:
       swp1:
         alias: server01
         mlag: false 
         trunk: false
         vlan: 1001
+      swp2:
+        alias: server02
+      swp49:
+        alias: leaf02
+      swp50:
+        alias: leaf02
+      swp51:
+        alias: spine01
+      swp52:
+        alias: spine02
       bond01:
-        mlag: true
         mlag-id: 1
         members:
-        - swp1
-        trunk: false
+          - swp1
+      bond02:
+        mlag-id: 2
+        member:
+          - swp2
         
   leaf02:
     lo: 10.0.0.12/32
