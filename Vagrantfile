@@ -2551,24 +2551,22 @@ Vagrant.configure("2") do |config|
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
     # Install Rules for the interface re-map
-    device.vm.provision :shell , :inline => <<-delete_udev_directory
-      if [ -d "/etc/udev/rules.d/70-persistent-net.rules" ]; then
-        rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-      fi
-      rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-    delete_udev_directory
-    
-    device.vm.provision :shell , :inline => <<-udev_rule
-      echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:5d --> eth0'
-      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:5d", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-    udev_rule
+    device.vm.provision :shell , :inline => <<-SET_INTERFACES
+      cat <<EOT > /etc/network/interfaces 
+      # The loopback network interface
+      auto lo
+      iface lo inet loopback
 
-    # device.vm.provision :shell , :inline => <<-vagrant_interface_rule
-    #   echo '  INFO: Adding UDEV Rule: Vagrant interface = eth0'
-    #   echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-    #   echo "#### UDEV Rules (/etc/udev/rules.d/70-persistent-net.rules) ####"
-    #   cat /etc/udev/rules.d/70-persistent-net.rules
-    # vagrant_interface_rule
+      # The primary network interface
+      #auto eth0
+      #iface eth0 inet dhcp
+
+      auto swp1
+      iface swp1 inet dhcp
+
+      EOT
+      SET_INTERFACES
+
 
     # Run Any Platform Specific Code and Apply the interface Re-map
     #   (may or may not perform a reboot depending on platform)
