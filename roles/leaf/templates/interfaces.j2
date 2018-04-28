@@ -43,10 +43,10 @@ iface bridge
 
 {% if node[inventory_hostname]["overlay"] is defined %}
 {% for l2domain in node[inventory_hostname]["overlay"]["l2domains"] -%}
-auto vni10{{l2domain}}
-iface vni10{{l2domain}}
+auto vni{{l2domain}}
+iface vni{{l2domain}}
   mtu 9000
-  vxlan-id 10{{l2domain}} 
+  vxlan-id {{l2domain}} 
   vxlan-local-tunnelip {{ node[inventory_hostname]["overlay"]["anycast-ip"] }} 
   bridge-access {{l2domain}}
   bridge-learning off

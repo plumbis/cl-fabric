@@ -27,11 +27,6 @@
       - netq_config.stdout.find('192.168.200.250') == -1
       - netq_config.stdout.find('mgmt') == -1
 
-  - name: Enable NetQ stats
-    command: netq config add stats
-    when:
-      - netq_stats_config.stdout.find('stats') == -1
-
   - name: NetQ config
     shell: systemctl status netqd@mgmt
     register: netq_daemon_state 
