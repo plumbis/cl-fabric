@@ -72,7 +72,8 @@ iface {{bond}}
 auto bridge
 iface bridge
   bridge-vlan-aware yes
-  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }} vxlan-tun{{ vlans | join(" vxlan-tun") }} {% for vrf in node[inventory_hostname]["vrfs"] %} vxlan-tun-{{ vrf }} {%- endfor %}
+    bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }} vxlan-tun{{ vlans | join(" vxlan-tun") }} {% for vrf in node[inventory_hostname]["vrfs"] %} vxlan-tun-{{ vrf }} {% endfor %}
+  
   bridge-vids {{ vlans | join(" ") }}
 
 {% for vlan in vlans %}
