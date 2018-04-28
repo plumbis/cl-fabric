@@ -269,3 +269,31 @@ node:
         alias: leaf03
       swp4:
         alias: leaf04
+  
+  server01:
+    ports:
+      - eth1
+      - eth2
+    bond:
+      ip: "172.16.100.101"
+    
+  server02:
+    ports:
+      - eth1
+      - eth2
+    bond:
+      ip: "172.16.200.101"
+  
+  server03:
+    ports:
+      - eth1
+      - eth2
+    bond:
+      ip: "172.16.100.102"
+  
+  server04:
+    ports:
+      - eth1
+      - eth2
+    bond:
+      ip: "172.16.200.102"
