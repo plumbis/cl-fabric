@@ -2563,12 +2563,12 @@ Vagrant.configure("2") do |config|
       echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:5d", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
     udev_rule
 
-    device.vm.provision :shell , :inline => <<-vagrant_interface_rule
-      echo '  INFO: Adding UDEV Rule: Vagrant interface = eth0'
-      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-      echo "#### UDEV Rules (/etc/udev/rules.d/70-persistent-net.rules) ####"
-      cat /etc/udev/rules.d/70-persistent-net.rules
-    vagrant_interface_rule
+    # device.vm.provision :shell , :inline => <<-vagrant_interface_rule
+    #   echo '  INFO: Adding UDEV Rule: Vagrant interface = eth0'
+    #   echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+    #   echo "#### UDEV Rules (/etc/udev/rules.d/70-persistent-net.rules) ####"
+    #   cat /etc/udev/rules.d/70-persistent-net.rules
+    # vagrant_interface_rule
 
     # Run Any Platform Specific Code and Apply the interface Re-map
     #   (may or may not perform a reboot depending on platform)
