@@ -90,7 +90,7 @@ iface vxlan-tunnel{{ vlan }}
 auto vlan{{ vlan }}
 iface vlan{{ vlan }}
   {% for vrf in node[inventory_hostname]["vrfs"] -%}
-      {%- if member == node[inventory_hostname]["vrfs"][vrf]["vlan_member"] -%}
+      {%- if vlan == node[inventory_hostname]["vrfs"][vrf]["vlan_member"] -%}
    vrf vrf-{{ vrf }}
       {% endif -%}
    {%- endfor %}
