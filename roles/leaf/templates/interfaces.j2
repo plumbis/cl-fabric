@@ -72,7 +72,7 @@ iface {{bond}}
 auto bridge
 iface bridge
   bridge-vlan-aware yes
-  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }} vni{{ vlans | join(" vni") }} vxlan-tunnel{{ vlans | join(" vxlan-tunnel") }} {% for vrf in node["leaf01"]["vrfs"] %} vxlan-tunnel-{{ vrf }} {%- endfor -%}
+  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }} vni{{ vlans | join(" vni") }} vxlan-tun{{ vlans | join(" vxlan-tun") }} {% for vrf in node[inventory_hostname]["vrfs"] %} vxlan-tun-{{ vrf }} {%- endfor -%}
   bridge-vids {{ vlans | join(" ") }}
 
 {% for vlan in vlans %}
@@ -100,8 +100,8 @@ iface vlan{{ vlan }}
 {% endfor %}
 
 {% for vrf in node[inventory_hostname]["vrfs"] %}
-auto vxlan-tunnel-{{ vrf }}
-iface vxlan-tunnel-{{ vrf }}
+auto vxlan-tun-{{ vrf }}
+iface vxlan-tun-{{ vrf }}
    vxlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
    vxlan-local-tunnelip {{ node[inventory_hostname]["mlag"]["anycast-ip"] }} 
    bridge-learning off
