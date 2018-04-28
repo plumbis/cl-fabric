@@ -1,0 +1,31 @@
+#########
+## Configured by Ansible
+#########
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+{% for port in node[inventory_hostname]["ports"] %}
+auto {{ port }}
+iface {{ port }} inet manual
+  bond-master uplink
+  # Required for Vagrant
+  post-up ip link set promisc on dev {{ port }}
+
+{% endfor %}
+
+auto uplink
+iface uplink inet static
+  mtu 9000
+  bond-slaves none
+  bond-mode 802.3ad
+  bond-miimon 100
+  bond-lacp-rate 1
+  bond-min-links 1
+  bond-xmit-hash-policy layer3+4
+  address {{ node[inventory_hostname]["bond"]["ip"] }}
+  netmask 255.255.255.0
+  #post-up ip route add 10.2.4.0/24 via 10.1.3.1
