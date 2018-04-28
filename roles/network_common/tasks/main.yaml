@@ -34,6 +34,11 @@
   tags:
     - netq
 
+  - name: Restart Rsyslog
+    service:
+      name: rsyslog
+      state: restarted
+      
 - name: Enable NetQ Service
   service:
     name: netqd
