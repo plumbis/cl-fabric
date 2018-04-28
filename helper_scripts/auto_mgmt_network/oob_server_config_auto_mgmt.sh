@@ -219,6 +219,7 @@ EOT
 
 echo "sudo su - cumulus" >> /home/vagrant/.bash_profile
 echo "exit" >> /home/vagrant/.bash_profile
+git clone https://github.com/plumbis/cl-fabric /home/cumulus/cl-fabric
 
 echo "############################################"
 echo "      DONE!"
