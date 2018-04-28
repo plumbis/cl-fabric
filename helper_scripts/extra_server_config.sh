@@ -44,8 +44,11 @@ if [ "$?" == "0" ]; then
     echo -e "DEVICE=eth0\nBOOTPROTO=dhcp\nONBOOT=yes" > /etc/sysconfig/network-scripts/ifcfg-eth0
 fi
 
+sudo adduser cumulus sudo
+echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
+
 echo "### Installing SSH Keys"
-cat << DONE > /etc/init.d/install_ssh_key
+cat << DONE > /etc/dhcp/dhclient-exit-hooks.d/get_keys
 #!/bin/bash
 
 mkdir -p /home/cumulus/.ssh
@@ -54,7 +57,7 @@ chmod 700 -R /home/cumulus
 chown -R cumulus:cumulus /home/cumulus
 chmod 600 /home/cumulus/.ssh/*
 chmod 700 /home/cumulus/.ssh
-rm $0
+
 DONE
 
 echo "#################################"
