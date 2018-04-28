@@ -136,9 +136,11 @@ node:
       swp1:
         alias: server03
         vlan: 100
+        mtu: 9000
       swp2:
         alias: server04
         vlan: 101
+        mtu: 9000
       swp49:
         alias: leaf04
       swp50:
