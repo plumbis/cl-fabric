@@ -1,12 +1,12 @@
 ---
 - name: Add Cumulus Repo
   apt_repository:
-    repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.2
+    repo: deb https://apps3.cumulusnetworks.com/repos/deb CumulusLinux-3 netq-1.3
     state: present
   tags:
     - netq
 
-- name: Upgrade NetQ to 1.2.1
+- name: Upgrade NetQ
   apt:
     name: cumulus-netq
     state: latest
