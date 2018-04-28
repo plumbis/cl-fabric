@@ -1,14 +1,24 @@
 ---
+- hosts: network
+  gather_facts: "no"
+  become: "yes"
+  roles:
+    - network_common
+
 - hosts: spines
   gather_facts: "no"
   become: "yes"
   roles:
-  - network_common
   - spine
 
 - hosts: leafs
   gather_facts: "no"
   become: "yes"
   roles:
-  - network_common
   - leaf
+
+- hosts: servers
+  gather_facts: "no"
+  become: "yes"
+  roles:
+    - server
