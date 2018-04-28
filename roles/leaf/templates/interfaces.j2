@@ -31,7 +31,6 @@ iface {{interface}}
 {% endfor %}
 
 {% if node[inventory_hostname]["mlag"] is defined %}
-auto peerlink
 iface peerlink
   mtu 9216
   bond-slaves {{ node[inventory_hostname]["mlag"]["peerlink"] | join(" ") }}
@@ -53,15 +52,12 @@ iface {{bond}}
 
 {% endfor %}
 
-{% set vlans = node[inventory_hostname]["bridge"]["vlans"] | join (" ") %}
+{% set vlans = node[inventory_hostname] ["bridge"]["vlans"] %}
 auto bridge
 iface bridge
   bridge-vlan-aware yes
-  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }}
-  {%- for vlan in vlans  -%}
-    vni{{ vlan }} 
-  {%- endfor -%}
-  bridge-vids {{ vlans }}
+  bridge-ports {{ node[inventory_hostname]["bridge"]["ports"] | join(" ") }} vni{{ vlans | join(" vni") }} 
+  bridge-vids {{ vlans | join(" ") }}
 
 {% for vlan in vlans %}
 auto vni{{ vlan }}
@@ -78,9 +74,10 @@ iface vni{{ vlan }}
 
 auto vlan{{ vlan }}
 iface vlan{{ vlan }}
-  address 192.168.{{ vlan }}.{{ node[inventory_hostname]["lo"].split("/")[:1] }}/24
+  address 192.168.{{ vlan }}.{{ node[inventory_hostname]["lo"].split("/")[0][:1] }}/24
   address-virtual 44:39:39:ff:00:13 192.168.{{ vlan }}.1/24
   vlan-raw-device bridge
+  
 {% endfor %}
 
 {% endif %}
