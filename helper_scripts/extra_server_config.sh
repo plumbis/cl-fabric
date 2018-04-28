@@ -7,6 +7,7 @@ sudo su
 
 useradd cumulus -m -s /bin/bash
 echo "cumulus:CumulusLinux!" | chpasswd
+sed "s/PasswordAuthentication no/PasswordAuthentication yes/" -i /etc/ssh/sshd_config
 
 # Hides "dpkg-reconfigure: unable to re-open stdin: No file or directory" error in Vagrant up
 export DEBIAN_FRONTEND=noninteractive
@@ -17,7 +18,7 @@ if [ "$?" == "0" ]; then
     #These lines will be used when booting on a debian-based box
     echo -e "note: ubuntu device detected"
     #Install LLDP
-    apt-get update -qy && apt-get install lldpd -qy
+    apt-get update -qy && apt-get install lldpd ntp ntpdate -qy
     echo "configure lldp portidsubtype ifname" > /etc/lldpd.d/port_info.conf
 
     #Replace existing network interfaces file
@@ -44,7 +45,6 @@ if [ "$?" == "0" ]; then
     echo -e "DEVICE=eth0\nBOOTPROTO=dhcp\nONBOOT=yes" > /etc/sysconfig/network-scripts/ifcfg-eth0
 fi
 
-sudo adduser cumulus sudo
 echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus
 
 echo "### Installing SSH Keys"
@@ -53,11 +53,29 @@ chmod 700 -R /home/cumulus
 chown -R cumulus:cumulus /home/cumulus
 chmod 600 /home/cumulus/.ssh/*
 chmod 700 /home/cumulus/.ssh
+echo -e "wget http://192.168.200.254/authorized_keys -q -O /home/cumulus/.ssh/authorized_keys" > /etc/dhcp/dhclient-exit-hooks.d/get_keys
 
-cat << DONE > /etc/dhcp/dhclient-exit-hooks.d/get_keys
-wget http://192.168.200.254/authorized_keys -q -O /home/cumulus/.ssh/authorized_keys
 
-DONE
+echo "### Writing NTP Data"
+echo -e "Etc/UTC" > /etc/timezone
+cat << EOT > /etc/ntp.conf
+# /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
+driftfile /var/lib/ntp/ntp.drift
+statistics loopstats peerstats clockstats
+filegen loopstats file loopstats type day enable
+filegen peerstats file peerstats type day enable
+filegen clockstats file clockstats type day enable
+server 192.168.0.254 iburst
+# By default, exchange time with everybody, but don't allow configuration.
+restrict -4 default kod notrap nomodify nopeer noquery
+restrict -6 default kod notrap nomodify nopeer noquery
+# Local users may interrogate the ntp server more closely.
+restrict 127.0.0.1
+restrict ::1
+# Specify interfaces, don't listen on switch ports
+interface listen eth0
+EOT
+
 
 echo "#################################"
 echo "   Finished"
