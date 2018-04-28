@@ -2551,6 +2551,13 @@ Vagrant.configure("2") do |config|
     device.vm.provision :shell, privileged: false, inline: "sudo mv ~/topology.dot /etc/ptm.d/topology.dot"
 
     # Install Rules for the interface re-map
+    device.vm.provision :shell , :inline => <<-delete_udev_directory
+      if [ -d "/etc/udev/rules.d/70-persistent-net.rules" ]; then
+        rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
+      fi
+      rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
+    delete_udev_directory
+    
     device.vm.provision :shell , :inline => <<-SET_INTERFACES
       cat <<EOT > /etc/network/interfaces 
       # The loopback network interface
