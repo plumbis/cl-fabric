@@ -1,41 +1,29 @@
-[exit]
+[exits]
 exit02 ansible_user=cumulus
 exit01 ansible_user=cumulus
 
-[leaf]
+[leafs]
 leaf04 ansible_user=cumulus
 leaf02 ansible_user=cumulus
 leaf03 ansible_user=cumulus
 leaf01 ansible_user=cumulus
 
-[spine]
+[spines]
 spine02 ansible_user=cumulus
 spine01 ansible_user=cumulus
 
-[superspine]
-super02 ansible_user=cumulus
-super01 ansible_user=cumulus
+[servers]
+server01 ansible_user=cumulus
+server02 ansible_user=cumulus
+server03 ansible_user=cumulus
+server04 ansible_user=cumulus
 
-[host]
-host1 ansible_user=cumulus
-host2 ansible_user=cumulus
-host3 ansible_user=cumulus
-host4 ansible_user=cumulus
-host5 ansible_user=cumulus
-host6 ansible_user=cumulus
-host7 ansible_user=cumulus
-host8 ansible_user=cumulus
 
 [leafs:children]
-leaf
-exit
-
-[spines:children]
-spine
-superspine
+leafs
+exits
 
 [network:children]
-leaf
-spine
-superspine
-exit
+leafs
+spines
+exits
