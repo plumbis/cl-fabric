@@ -133,7 +133,7 @@ node:
         mtu: 9000
       swp2:
         alias: server02
-        vlan: 101
+        vlan: 200
         mtu: 9000
       swp49:
         alias: leaf01
@@ -157,11 +157,11 @@ node:
           - swp2
         trunk: false
         vlans:
-          - 101
+          - 200
     bridge:
       vlans:
         - 100
-        - 101
+        - 200
       ports:
         - peerlink
         - bond01
@@ -199,7 +199,7 @@ node:
         mtu: 9000
       swp2:
         alias: server04
-        vlan: 101
+        vlan: 200
         mtu: 9000
       swp49:
         alias: leaf04
@@ -223,11 +223,11 @@ node:
           - swp2
         trunk: false
         vlans:
-          - 101
+          - 200
     bridge:
       vlans:
         - 100
-        - 101
+        - 200
       ports:
         - peerlink
         - bond01
@@ -264,7 +264,7 @@ node:
         vlan: 100
       swp2:
         alias: server04
-        vlan: 101
+        vlan: 200
       swp49:
         alias: leaf03
       swp50:
@@ -287,11 +287,11 @@ node:
           - swp2
         trunk: false
         vlans:
-          - 101
+          - 200
     bridge:
       vlans:
         - 100
-        - 101
+        - 200
       ports:
         - peerlink
         - bond01
