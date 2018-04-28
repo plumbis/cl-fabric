@@ -54,7 +54,7 @@
     name: cumulus-netq
     state: latest
     update_cache: yes
-  register: install-netq
+  register: install_netq
   tags:
     - netq
 
@@ -62,7 +62,7 @@
   service:
     name: rsyslog
     state: restarted
-  when: install-netq.changed
+  when: install_netq.changed
   tags:
     - netq
 
