@@ -6,43 +6,51 @@ node:
       asn: '65041'
       evpn: true
       peers:
-        - swp49
-        - swp50
         - swp51
         - swp52
     ports:
       swp44:
         alias: internet
-      swp49:
-        alias: exit02
-      swp50:
-        alias: exit02
+        mtu: 9000
+        vrf: red
       swp51:
         alias: spine01
       swp52:
         alias: spine02
-  
+    bridge:
+      vlans:
+        - 100
+      ports:
+        - swp44
+    vrfs:
+      red:
+        vlan_member: 100
+
   exit02:
     lo: 10.0.0.42/32
     bgp:
       asn: '65042'
       evpn: true
       peers:
-        - swp49
-        - swp50
         - swp51
         - swp52
     ports:
       swp44:
         alias: internet
-      swp49:
-        alias: exit02
-      swp50:
-        alias: exit02
+        mtu: 9000
+        vrf: blue
       swp51:
         alias: spine01
       swp52:
         alias: spine02
+    bridge:
+      vlans:
+        - 200
+      ports:
+        - swp44
+    vrfs:
+      blue:
+        vlan_member: 200
 
   leaf01:
     lo: 10.0.0.11/32

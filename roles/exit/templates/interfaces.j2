@@ -1,0 +1,57 @@
+# The loopback network interface
+auto lo
+iface lo inet loopback
+   address {{node[inventory_hostname]["lo"]}}
+
+auto eth0
+iface eth0 inet dhcp
+ vrf mgmt
+
+auto mgmt
+iface mgmt
+  address 127.0.0.1/8
+  vrf-table auto
+
+{% for vrf in node[inventory_hostname]["vrfs"] %}
+auto vrf-{{ vrf }}
+iface vrf-{{ vrf }}
+    vrf-table auto
+    
+{% endfor %}
+
+{%-  for interface in node[inventory_hostname]["ports"] -%}
+auto {{interface}}
+iface {{interface}}
+   {% if node[inventory_hostname]["ports"][interface]["mtu"] is defined -%}
+   mtu {{ node[inventory_hostname]["ports"][interface]["mtu"] }}
+   {% else -%}
+   mtu 9216
+   {%- endif -%}
+   {% if node[inventory_hostname]["ports"][interface]["vrf"] is defined -%}
+  vrf vrf-{{ node[inventory_hostname]["ports"][interface]["vrf"] }}
+   {%- endif %}
+
+{% endfor %}
+
+
+auto bridge
+iface bridge
+  bridge-vlan-aware yes
+  bridge-ports {% for vrf in node[inventory_hostname]["vrfs"] %} vxlan-tun-{{ vrf }} {% endfor %}   
+
+
+{% for vrf in node[inventory_hostname]["vrfs"] %}
+auto vxlan-tun-{{ vrf }}
+iface vxlan-tun-{{ vrf }}
+   vxlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+   vxlan-local-tunnelip {{ node["lo"] }} 
+   bridge-learning off
+   bridge-access {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+
+auto vlan{{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+iface vlan{{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+  vlan-raw-device bridge
+  vlan-id {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+  vrf vrf-{{ vrf }}
+  
+{% endfor %}
