@@ -11,9 +11,10 @@
     name: cumulus-netq
     state: latest
     update_cache: no
+  register: install-netq
   tags:
     - netq
-
+  
 # return code 0 means it's running
 # return code 1 means it's not in the output of grep
 # other return code is unknown
@@ -34,10 +35,11 @@
   tags:
     - netq
 
-  - name: Restart Rsyslog
-    service:
-      name: rsyslog
-      state: restarted
+- name: Restart Rsyslog
+  service:
+    name: rsyslog
+    state: restarted
+  when: install-netq.changed
       
 - name: Enable NetQ Service
   service:
