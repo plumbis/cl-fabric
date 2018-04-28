@@ -89,6 +89,7 @@ iface vxlan-tunnel{{ vlan }}
 
 auto vlan{{ vlan }}
 iface vlan{{ vlan }}
+  vlan-id {{ vlan }}
   {% for vrf in node[inventory_hostname]["vrfs"] -%}
       {%- if vlan == node[inventory_hostname]["vrfs"][vrf]["vlan_member"] -%}
    vrf vrf-{{ vrf }}
@@ -97,6 +98,7 @@ iface vlan{{ vlan }}
   address 172.16.{{ vlan }}.{{ node[inventory_hostname]["lo"].split("/")[0][:1] }}0/24
   address-virtual 44:39:39:ff:00:13 172.16.{{ vlan }}.1/24
   vlan-raw-device bridge
+
 {% endfor %}
 
 {% for vrf in node[inventory_hostname]["vrfs"] %}
