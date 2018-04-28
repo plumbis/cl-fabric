@@ -2557,22 +2557,22 @@ Vagrant.configure("2") do |config|
       fi
       rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
     delete_udev_directory
-    
+
     device.vm.provision :shell , :inline => <<-SET_INTERFACES
-      cat <<EOT > /etc/network/interfaces 
-      # The loopback network interface
-      auto lo
-      iface lo inet loopback
+cat <<EOT > /etc/network/interfaces 
+# The loopback network interface
+auto lo
+iface lo inet loopback
 
-      # The primary network interface
-      #auto eth0
-      #iface eth0 inet dhcp
+# The primary network interface
+#auto eth0
+#iface eth0 inet dhcp
 
-      auto swp1
-      iface swp1 inet dhcp
+auto swp1
+iface swp1 inet dhcp
 
-      EOT
-      SET_INTERFACES
+EOT
+SET_INTERFACES
 
 
     # Run Any Platform Specific Code and Apply the interface Re-map
