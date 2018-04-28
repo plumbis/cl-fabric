@@ -64,7 +64,6 @@ auto vni{{ vlan }}
 iface vni{{ vlan }}
   mtu 9000
   vxlan-id {{ vlan }}
-  vxlan-local-tunnelip
   vxlan-local-tunnelip {{ node[inventory_hostname]["mlag"]["anycast-ip"] }} 
   bridge-access {{ vlan }}
   bridge-learning off
