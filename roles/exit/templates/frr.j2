@@ -31,8 +31,15 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
   redistribute connected route-map loopbacks
  exit-address-family
  !
+ {% if node[inventory_hostname]["bgp"]["evpn"] is defined %}
+ address-family l2vpn evpn
+   neighbor FABRIC activate
+   advertise-all-vni
+ exit-address-family
+{% endif %}
+!
  {% for vrf in node[inventory_hostname]["vrfs"] %}
- address-family ipv4 unicast vrf {{ vrf }}
+ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }} vrf {{ vrf }}
    {% for interface in node[inventory_hostname]["ports"] %}
     {% if node[inventory_hostname]["ports"][interface]["vrf"] is defined %}
       neighbor {{ interface }} remote-as external
@@ -41,12 +48,6 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
    {% endfor %}
  !
   {% endfor %}
- {% if node[inventory_hostname]["bgp"]["evpn"] is defined %}
- address-family l2vpn evpn
-   neighbor FABRIC activate
-   advertise-all-vni
- exit-address-family
-{% endif %}
 !
 route-map loopbacks permit 10
  match interface lo
