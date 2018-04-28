@@ -33,7 +33,7 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
  !
  {% for vrf in node[inventory_hostname]["vrfs"] %}
  address-family ipv4 unicast vrf {{ vrf }}
-   {% for interface in node[inventory_hostname]["ports"][interface] %}
+   {% for interface in node[inventory_hostname]["ports"] %}
     {% if node[inventory_hostname]["ports"][interface]["vrf"] is defined %}
       neighbor {{ interface }} remote-as external
       neighbor {{ interface }} timers 1 3
