@@ -43,7 +43,7 @@ node:
           - 100
       bond02:
         mlag_id: 2
-        member:
+        members:
           - swp2
         trunk: false
         vlans:
@@ -100,7 +100,7 @@ node:
           - 100
       bond02:
         mlag_id: 2
-        member:
+        members:
           - swp2
         trunk: false
         vlans:
@@ -159,7 +159,7 @@ node:
           - 100
       bond02:
         mlag_id: 2
-        member:
+        members:
           - swp2
         trunk: false
         vlans:
@@ -216,7 +216,7 @@ node:
           - 100
       bond02:
         mlag_id: 2
-        member:
+        members:
           - swp2
         trunk: false
         vlans:
