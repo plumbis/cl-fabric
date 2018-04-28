@@ -19,7 +19,7 @@
   template:
     src: frr.j2
     dest: /etc/frr/frr.conf
-    backup: yes
+    backup: "yes"
   notify: reload frr
   tags:
     - frr
