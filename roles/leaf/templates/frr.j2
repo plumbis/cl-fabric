@@ -6,6 +6,11 @@ service integrated-vtysh-config
 !
 log syslog informational
 !
+{% for vrf in node[inventory_hostname]["vrfs"] %}
+vrf vrf-{{ vrf}}
+  vni {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
+!
+{% endfor %}
 {% for interface in node[inventory_hostname]["bgp"]["peers"] -%}
 interface {{interface}}
  ipv6 nd ra-interval 10
