@@ -3,7 +3,6 @@ auto lo
 iface lo inet loopback
    address {{node[inventory_hostname]["lo"]}}
 
-
 auto eth0
 iface eth0 inet dhcp
  vrf mgmt
@@ -13,8 +12,12 @@ iface mgmt
   address 127.0.0.1/8
   vrf-table auto
 
-{% for interface in node[inventory_hostname]["bgp"]["peers"] -%}
+{% for interface in node[inventory_hostname]["ports"] -%}
 auto {{interface}}
 iface {{interface}}
+   {% if node[inventory_hostname]["ports"][interface]["mtu"] is defined %}
+   mtu {{ node[inventory_hostname]["ports"][interface]["mtu"] }}
+   {% else %}
    mtu 9216
+   {% endif %}
 {% endfor %}

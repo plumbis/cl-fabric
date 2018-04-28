@@ -229,3 +229,25 @@ node:
         - peerlink
         - bond01
         - bond02
+
+  spine01:
+    lo: 10.0.0.21/32
+    bgp:
+      asn: '65020'
+      evpn: true
+      peers:
+        - swp1
+        - swp2
+        - swp3
+        - swp4
+
+  spine02:
+    lo: 10.0.0.22/32
+    bgp:
+      asn: '65020'
+      evpn: true
+      peers:
+        - swp1
+        - swp2
+        - swp3
+        - swp4
