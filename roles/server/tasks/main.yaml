@@ -1,9 +1,11 @@
 ---
 - name: Copy Interface Config
-  copy:
-    src: configurations/{{ansible_hostname}}/interfaces
+  template:
+    src: interfaces.j2
     dest: /etc/network/interfaces
   register: reboot
+  tags:
+    - interfaces
 
 # Ping script is so servers generate traffic to populate MAC tables
 # - name: Configure Server01 Ping Cronjob
