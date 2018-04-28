@@ -482,7 +482,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -683,7 +683,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -884,7 +884,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -1062,7 +1062,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -1240,7 +1240,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -1446,7 +1446,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -1652,7 +1652,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -1858,7 +1858,7 @@ Vagrant.configure("2") do |config|
     device.vm.box_version = "3.5.3"
 
     device.vm.provider "libvirt" do |v|      
-        v.memory = 768    
+        v.memory = 1024    
         
 
     end
@@ -2041,98 +2041,6 @@ Vagrant.configure("2") do |config|
     device.vm.provision :shell , :inline => <<-udev_rule
       echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:63 --> eth0'
       echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:63", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-    udev_rule
-
-    device.vm.provision :shell , :inline => <<-vagrant_interface_rule
-      echo '  INFO: Adding UDEV Rule: Vagrant interface = vagrant'
-      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-      echo "#### UDEV Rules (/etc/udev/rules.d/70-persistent-net.rules) ####"
-      cat /etc/udev/rules.d/70-persistent-net.rules
-    vagrant_interface_rule
-
-    # Run Any Platform Specific Code and Apply the interface Re-map
-    #   (may or may not perform a reboot depending on platform)
-    device.vm.provision :shell , :inline => $script
-
-  end
-        
-##### DEFINE VM for edge01 #####
-  config.vm.define "edge01" do |device|
-    
-    device.vm.hostname = "edge01"
-    device.vm.box = "yk0/ubuntu-xenial"
-
-    device.vm.provider "libvirt" do |v|      
-        v.memory = 512    
-        
-        v.nic_model_type = 'e1000'
-
-    end
-    # see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
-    device.vm.synced_folder ".", "/vagrant", disabled: true
-
-    # NETWORK INTERFACES
-    # link for eth2 --> exit02:swp1
-        device.vm.network "private_network",
-        :mac => '44:38:39:00:00:0a',
-        :libvirt__tunnel_type => 'udp',
-        :libvirt__tunnel_local_ip => '127.0.0.1',
-        :libvirt__tunnel_local_port => '1030',
-        :libvirt__tunnel_ip => '127.0.0.1',
-        :libvirt__tunnel_port => '9030',
-        :libvirt__iface_name => 'eth2',
-        auto_config: false
-    # link for eth1 --> exit01:swp1
-        device.vm.network "private_network",
-        :mac => '44:38:39:00:00:46',
-        :libvirt__tunnel_type => 'udp',
-        :libvirt__tunnel_local_ip => '127.0.0.1',
-        :libvirt__tunnel_local_port => '1060',
-        :libvirt__tunnel_ip => '127.0.0.1',
-        :libvirt__tunnel_port => '9060',
-        :libvirt__iface_name => 'eth1',
-        auto_config: false
-    # link for eth0 --> oob-mgmt-switch:swp7
-        device.vm.network "private_network",
-        :mac => '44:38:39:00:00:65',
-        :libvirt__tunnel_type => 'udp',
-        :libvirt__tunnel_local_ip => '127.0.0.1',
-        :libvirt__tunnel_local_port => '1075',
-        :libvirt__tunnel_ip => '127.0.0.1',
-        :libvirt__tunnel_port => '9075',
-        :libvirt__iface_name => 'eth0',
-        auto_config: false 
-
-    # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
-    device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
-
-    # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
-    device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
-        
-    # Run the Config specified in the Node Attributes
-    device.vm.provision :shell , privileged: false, :inline => 'echo "$(whoami)" > /tmp/normal_user'
-    device.vm.provision :shell , path: "./helper_scripts/extra_server_config.sh"
-    
-
-    # Install Rules for the interface re-map
-    device.vm.provision :shell , :inline => <<-delete_udev_directory
-      if [ -d "/etc/udev/rules.d/70-persistent-net.rules" ]; then
-        rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-      fi
-      rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
-    delete_udev_directory
-    
-    device.vm.provision :shell , :inline => <<-udev_rule
-      echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:0a --> eth2'
-      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0a", NAME="eth2", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-    udev_rule
-    device.vm.provision :shell , :inline => <<-udev_rule
-      echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:46 --> eth1'
-      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:46", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
-    udev_rule
-    device.vm.provision :shell , :inline => <<-udev_rule
-      echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:65 --> eth0'
-      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:65", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
     udev_rule
 
     device.vm.provision :shell , :inline => <<-vagrant_interface_rule
@@ -2557,23 +2465,105 @@ Vagrant.configure("2") do |config|
       fi
       rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
     delete_udev_directory
-
+    
     device.vm.provision :shell , :inline => <<-SET_INTERFACES
 cat <<EOT > /etc/network/interfaces 
 # The loopback network interface
 auto lo
 iface lo inet loopback
-
 # The primary network interface
 #auto eth0
 #iface eth0 inet dhcp
-
 auto eth1
 iface eth1 inet dhcp
-
 EOT
 SET_INTERFACES
 
+    # Run Any Platform Specific Code and Apply the interface Re-map
+    #   (may or may not perform a reboot depending on platform)
+    device.vm.provision :shell , :inline => $script
+
+  end
+        
+##### DEFINE VM for edge01 #####
+  config.vm.define "edge01" do |device|
+    
+    device.vm.hostname = "edge01"
+    device.vm.box = "yk0/ubuntu-xenial"
+
+    device.vm.provider "libvirt" do |v|      
+        v.memory = 512    
+        
+
+    end
+    # see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
+    device.vm.synced_folder ".", "/vagrant", disabled: true
+
+    # NETWORK INTERFACES
+    # link for eth2 --> exit02:swp1
+        device.vm.network "private_network",
+        :mac => '44:38:39:00:00:0a',
+        :libvirt__tunnel_type => 'udp',
+        :libvirt__tunnel_local_ip => '127.0.0.1',
+        :libvirt__tunnel_local_port => '1030',
+        :libvirt__tunnel_ip => '127.0.0.1',
+        :libvirt__tunnel_port => '9030',
+        :libvirt__iface_name => 'eth2',
+        auto_config: false
+    # link for eth1 --> exit01:swp1
+        device.vm.network "private_network",
+        :mac => '44:38:39:00:00:46',
+        :libvirt__tunnel_type => 'udp',
+        :libvirt__tunnel_local_ip => '127.0.0.1',
+        :libvirt__tunnel_local_port => '1060',
+        :libvirt__tunnel_ip => '127.0.0.1',
+        :libvirt__tunnel_port => '9060',
+        :libvirt__iface_name => 'eth1',
+        auto_config: false
+    # link for eth0 --> oob-mgmt-switch:swp7
+        device.vm.network "private_network",
+        :mac => '44:38:39:00:00:65',
+        :libvirt__tunnel_type => 'udp',
+        :libvirt__tunnel_local_ip => '127.0.0.1',
+        :libvirt__tunnel_local_port => '1075',
+        :libvirt__tunnel_ip => '127.0.0.1',
+        :libvirt__tunnel_port => '9075',
+        :libvirt__iface_name => 'eth0',
+        auto_config: false 
+
+    # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
+    device.vm.provision :shell , inline: "(sudo grep -q 'mesg n' /root/.profile 2>/dev/null && sudo sed -i '/mesg n/d' /root/.profile  2>/dev/null) || true;", privileged: false
+
+    # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
+    device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf 2>/dev/null || true"
+
+    # Install Rules for the interface re-map
+    device.vm.provision :shell , :inline => <<-delete_udev_directory
+      if [ -d "/etc/udev/rules.d/70-persistent-net.rules" ]; then
+        rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
+      fi
+      rm -rfv /etc/udev/rules.d/70-persistent-net.rules &> /dev/null
+    delete_udev_directory
+    
+    device.vm.provision :shell , :inline => <<-udev_rule
+      echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:0a --> eth2'
+      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:0a", NAME="eth2", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+    udev_rule
+    device.vm.provision :shell , :inline => <<-udev_rule
+      echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:46 --> eth1'
+      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:46", NAME="eth1", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+    udev_rule
+    device.vm.provision :shell , :inline => <<-udev_rule
+      echo '  INFO: Adding UDEV Rule: 44:38:39:00:00:65 --> eth0'
+      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{address}=="44:38:39:00:00:65", NAME="eth0", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+    udev_rule
+
+    device.vm.provision :shell , :inline => <<-vagrant_interface_rule
+      echo '  INFO: Adding UDEV Rule: Vagrant interface = vagrant'
+      echo 'ACTION=="add", SUBSYSTEM=="net", ATTR{ifindex}=="2", NAME="vagrant", SUBSYSTEMS=="pci"' >> /etc/udev/rules.d/70-persistent-net.rules
+      echo "#### UDEV Rules (/etc/udev/rules.d/70-persistent-net.rules) ####"
+      cat /etc/udev/rules.d/70-persistent-net.rules
+    vagrant_interface_rule
 
     # Run Any Platform Specific Code and Apply the interface Re-map
     #   (may or may not perform a reboot depending on platform)
