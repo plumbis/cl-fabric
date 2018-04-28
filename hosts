@@ -19,10 +19,6 @@ server03 ansible_user=cumulus
 server04 ansible_user=cumulus
 
 
-[leafs:children]
-leafs
-exits
-
 [network:children]
 leafs
 spines
