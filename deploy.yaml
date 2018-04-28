@@ -3,12 +3,12 @@
   gather_facts: "no"
   become: "yes"
   roles:
-  - setup
+  - network_common
   - spine
 
 - hosts: leafs
   gather_facts: "no"
   become: "yes"
   roles:
-  - setup
+  - network_common
   - leaf
