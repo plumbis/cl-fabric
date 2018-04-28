@@ -73,7 +73,7 @@ iface vni{{ vlan }}
 
 auto vlan{{ vlan }}
 iface vlan{{ vlan }}
-  address 192.168.{{ vlan }}.{{ node[inventory_hostname]["lo"].split("/")[0][:1] }}/24
+  address 172.16.{{ vlan }}.{{ node[inventory_hostname]["lo"].split("/")[0][:1] }}/24
   address-virtual 44:39:39:ff:00:13 192.168.{{ vlan }}.1/24
   vlan-raw-device bridge
   
