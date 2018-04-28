@@ -20,8 +20,6 @@ node:
     bridge:
       vlans:
         - 100
-      ports:
-        - swp44
     vrfs:
       red:
         vlan_member: 100
@@ -323,6 +321,7 @@ node:
         - swp3
         - swp4
         - swp29
+        - swp30
     ports:
       swp1:
         alias: leaf01
