@@ -19,14 +19,24 @@ iface mgmt
 {% for interface in node[inventory_hostname]["ports"] -%}
 auto {{interface}}
 iface {{interface}}
-   {% if node[inventory_hostname]["ports"][interface]["mtu"] is defined %}
+   {% if node[inventory_hostname]["ports"][interface]["mtu"] is defined -%}
    mtu {{ node[inventory_hostname]["ports"][interface]["mtu"] }}
-   {% else %}
+   {% else -%}
    mtu 9216
-   {% endif %}
-  {% if node[inventory_hostname]["bond_member"] is defined %}
-   post-up ip link set swp49 promisc on
-  {% endif %}
+   {% endif -%}
+  {% for bond in node[inventory_hostname]["bonds"] -%}
+    {%- for member in node[inventory_hostname]["bonds"][bond]["members"] -%}
+      {%- if member == interface -%}
+   post-up ip link set {{ interface }} promisc on
+      {% endif -%}
+    {%- endfor -%}
+   {%- endfor %}
+
+  {%- for member in node[inventory_hostname]["mlag"]["peerlink"] -%}
+    {%- if member == interface -%}
+   post-up ip link set {{ interface }} promisc on
+    {% endif -%}
+   {%- endfor %}
 
 {% endfor %}
 
