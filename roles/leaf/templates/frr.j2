@@ -35,6 +35,7 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
  address-family l2vpn evpn
    neighbor FABRIC activate
    advertise-all-vni
+   advertise ipv4 unicast
  exit-address-family
 {% endif %}
 !
