@@ -39,7 +39,7 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
 {% endif %}
 !
 {% for vrf in node[inventory_hostname]["vrfs"] %}
- router bgp {{ node[inventory_hostname]["bgp"]["asn"] }} vrf {{ vrf }}
+ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }} vrf vrf-{{ vrf }}
    neighbor swp44 interface remote-as external
    neighbor swp44 timers 1 3
  !
