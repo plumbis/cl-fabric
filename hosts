@@ -18,8 +18,11 @@ server02 ansible_user=cumulus
 server03 ansible_user=cumulus
 server04 ansible_user=cumulus
 
+[internets]
+internet ansible_user=cumulus
 
 [network:children]
 leafs
 spines
 exits
+internet
