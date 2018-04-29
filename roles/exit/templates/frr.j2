@@ -44,6 +44,9 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
    bgp bestpath as-path multipath-relax
    neighbor swp44 interface remote-as external
    neighbor swp44 timers 1 3
+
+   address-family l2vpn evpn
+      advertise ipv4 unicast
  !
 {% endfor %}
 !
