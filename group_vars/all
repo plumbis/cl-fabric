@@ -389,3 +389,16 @@ node:
       - eth2
     bond:
       ip: "172.16.200.102"
+
+  internet:
+    lo: 10.0.0.253
+    bgp:
+      asn: '25253'
+      peers:
+        - swp1
+        - swp2
+    ports:
+      swp1:
+        vrf: red
+      swp2:
+        vrf: blue

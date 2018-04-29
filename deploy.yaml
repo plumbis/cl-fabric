@@ -28,3 +28,9 @@
   become: "yes"
   roles:
     - exit
+
+- hosts: internet
+  gather_facts: "no"
+  become: "yes"
+  roles:
+    - internet
