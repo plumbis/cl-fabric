@@ -38,10 +38,12 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
  exit-address-family
 {% endif %}
 !
+{% for vrf in node[inventory_hostname]["vrfs"] %}
  router bgp {{ node[inventory_hostname]["bgp"]["asn"] }} vrf {{ vrf }}
    neighbor swp44 interface remote-as external
    neighbor swp44 timers 1 3
  !
+{% endfor %}
 !
 route-map loopbacks permit 10
  match interface lo
