@@ -368,28 +368,39 @@ node:
       - eth2
     bond:
       ip: "172.16.100.101"
-    
+    statics:
+      route: "172.16.200.0/24"
+      gateway: "172.16.100.1"
   server02:
     ports:
       - eth1
       - eth2
     bond:
       ip: "172.16.200.101"
-  
+    statics:
+      route: "172.16.100.0/24"
+      gateway: "172.16.200.1"
+
   server03:
     ports:
       - eth1
       - eth2
     bond:
       ip: "172.16.100.102"
-  
+    statics:
+      route: "172.16.200.0/24"
+      gateway: "172.16.100.1"
+
   server04:
     ports:
       - eth1
       - eth2
     bond:
       ip: "172.16.200.102"
-
+    statics:
+      route: "172.16.100.0/24"
+      gateway: "172.16.200.1"
+      
   internet:
     lo: 10.0.0.253
     bgp:

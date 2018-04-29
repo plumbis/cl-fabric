@@ -28,4 +28,4 @@ iface uplink inet static
   bond-xmit-hash-policy layer3+4
   address {{ node[inventory_hostname]["bond"]["ip"] }}
   netmask 255.255.255.0
-  #post-up ip route add 10.2.4.0/24 via 10.1.3.1
+  post-up ip route add {{ node[inventory_hostname]["statics"]["route"]}} via {{ node[inventory_hostname]["statics"]["gateway"]}}
