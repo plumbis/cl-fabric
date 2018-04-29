@@ -11,7 +11,7 @@ vrf vrf-{{ vrf}}
   vni {{ node[inventory_hostname]["vrfs"][vrf]["vlan_member"] | int + 1 }}
 !
 {% endfor %}
-{% for interface in node[inventory_hostname]["bgp"]["peers"] -%}
+{% for interface in node[inventory_hostname]["ports"] -%}
 interface {{interface}}
  ipv6 nd ra-interval 10
  no ipv6 nd suppress-ra
@@ -38,16 +38,10 @@ router bgp {{ node[inventory_hostname]["bgp"]["asn"] }}
  exit-address-family
 {% endif %}
 !
- {% for vrf in node[inventory_hostname]["vrfs"] -%}
  router bgp {{ node[inventory_hostname]["bgp"]["asn"] }} vrf {{ vrf }}
-   {% for interface in node[inventory_hostname]["ports"] -%}
-    {% if node[inventory_hostname]["ports"][interface]["vrf"] is defined -%}
-   neighbor {{ interface }} interface remote-as external
-   neighbor {{ interface }} timers 1 3
-    {% endif -%}
-   {% endfor -%}
+   neighbor swp44 interface remote-as external
+   neighbor swp44 timers 1 3
  !
-  {% endfor -%}
 !
 route-map loopbacks permit 10
  match interface lo

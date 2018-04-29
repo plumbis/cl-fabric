@@ -6,7 +6,6 @@ node:
       asn: '65041'
       evpn: true
       peers:
-        - swp44
         - swp51
         - swp52
     ports:
@@ -31,7 +30,6 @@ node:
       asn: '65042'
       evpn: true
       peers:
-        - swp44
         - swp51
         - swp52
     ports:
